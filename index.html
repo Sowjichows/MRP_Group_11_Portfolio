@@ -311,24 +311,37 @@ tbody tr:hover { background: #F8FAFF; }
 
 <!-- ──── HOME ──── -->
 <div class="section active" id="home">
-  <div class="page-header">
-    <h1>City of Riverton, Parking Permit & Enforcement Modernization</h1>
-    <p>MRP Group 11 | IS-5960-02 | Saint Louis University | Spring 2026</p>
-  </div>
-  <div class="content">
-    <div class="hero-banner">
-      <h2>Riverton Parking Modernization</h2>
-      <div class="sub">A data-driven proposal to modernize Riverton's parking permit, enforcement, and revenue operations</div>
-      <div class="team-chips">
-        <span class="team-chip">Amruth Raju Melike</span>
-        <span class="team-chip">Sharanya Pakker</span>
-        <span class="team-chip">Sowjanya Chowdary Kavuri</span>
-        <span class="team-chip">Sri Sharana Lingala</span>
-        <span class="team-chip">Vani Meenakshi Kalva</span>
+  <div class="content" style="padding-top:24px;">
+
+    <!-- Hero card -->
+    <div style="background:linear-gradient(135deg,#0062ad 0%,#0078D4 50%,#2899f5 100%); border-radius:8px; padding:36px 32px; color:#fff; margin-bottom:16px; position:relative; overflow:hidden;">
+      <div style="position:absolute; right:-30px; top:-30px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,0.05);"></div>
+      <div style="position:absolute; right:80px; bottom:-50px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,0.03);"></div>
+      <p style="font-size:11px; color:rgba(255,255,255,0.6); letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; position:relative;">MRP Group 11 | IS-5960-02 | Saint Louis University</p>
+      <h1 style="font-size:28px; font-weight:700; color:#fff; margin-bottom:6px; position:relative;">City of Riverton</h1>
+      <p style="font-size:16px; font-weight:400; color:rgba(255,255,255,0.85); margin-bottom:0; position:relative;">Parking Permit & Enforcement Modernization</p>
+    </div>
+
+    <!-- Team + Links row -->
+    <div style="display:grid; grid-template-columns:1fr auto; gap:12px; margin-bottom:16px;">
+      <div class="card" style="margin-bottom:0;">
+        <h3 style="border:none; padding:0; margin-bottom:8px; font-size:12px; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.5px;">Team Members</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span style="font-size:13px; color:var(--text);">Amruth Raju Melike</span>
+          <span style="color:var(--border);">|</span>
+          <span style="font-size:13px; color:var(--text);">Sharanya Pakker</span>
+          <span style="color:var(--border);">|</span>
+          <span style="font-size:13px; color:var(--text);">Sowjanya Chowdary Kavuri</span>
+          <span style="color:var(--border);">|</span>
+          <span style="font-size:13px; color:var(--text);">Sri Sharana Lingala</span>
+          <span style="color:var(--border);">|</span>
+          <span style="font-size:13px; color:var(--text);">Vani Meenakshi Kalva</span>
+        </div>
       </div>
-      <div style="margin-top:16px; position:relative;">
-        <a href="https://mrp-group-11.vercel.app" target="_blank" class="btn btn-teal">Open Live Dashboard</a>
-        <a href="https://github.com/Sowjichows/MRP_Group_11" target="_blank" class="btn" style="background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.25);">GitHub Repo</a>
+      <div class="card" style="margin-bottom:0; display:flex; align-items:center; gap:8px;">
+        <a href="app/index.html" target="_blank" class="btn btn-teal" style="margin:0;">Open Riverton PMS App</a>
+        <a href="https://mrp-group-11.vercel.app" target="_blank" class="btn btn-blue" style="margin:0;">Live Dashboard</a>
+        <a href="https://github.com/Sowjichows/MRP_Group_11" target="_blank" class="btn btn-outline" style="margin:0;">GitHub</a>
       </div>
     </div>
 
@@ -401,8 +414,19 @@ tbody tr:hover { background: #F8FAFF; }
     <div class="card">
       <h3>What Other Cities Found</h3>
       <p>Before proposing anything, we wanted to see if Riverton's problems actually show up in other cities or if this case was unusual. They show up everywhere.</p>
-      <p>Oakland's city auditor (2017) found that weak citation tracking led to over $2 million in lost revenue per year just from voided tickets. Long Beach (2012) had $17.6 million in unpaid citations piling up over three years because their system was too slow to chase the money. Pasadena's parking garage audit (2019) found similar gaps: inconsistent controls and poor reconciliation between departments. McKinsey's research on government productivity (2017) puts a number on the broader pattern: $3.5 trillion in global losses every year from fragmented government workflows.</p>
-      <p>At the street level, Manville and Pinski (2021) found that in many US cities, over 40% of parked vehicles don't pay and only about 10% of violators actually get cited. Biyik et al. (2021) reviewed smart parking architectures and found that integrated systems consistently outperform disconnected ones.</p>
+      <table>
+        <thead><tr><th>Source</th><th>Key Finding</th><th>Relevance to Riverton</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Oakland City Auditor (2017)</strong></td><td>Weak citation tracking caused $2M+ in lost revenue from voided tickets annually</td><td>Same tracking gaps as Riverton's disconnected system</td></tr>
+          <tr><td><strong>Long Beach Audit (2012)</strong></td><td>$17.6M in unpaid citations over 3 years due to slow collection system</td><td>Mirrors Riverton's 42% uncollected fines</td></tr>
+          <tr><td><strong>Pasadena Audit (2019)</strong></td><td>Inconsistent controls and poor reconciliation between departments</td><td>Same inter-department fragmentation</td></tr>
+          <tr><td><strong>McKinsey (2017)</strong></td><td>$3.5 trillion in global government productivity losses from fragmented workflows</td><td>Validates that the problem is structural, not unique</td></tr>
+          <tr><td><strong>FHWA (2012)</strong></td><td>Up to 30% of downtown traffic may be cruising for parking due to poor management</td><td>Shows downstream impact of inefficient parking systems</td></tr>
+          <tr><td><strong>ITE (2019)</strong></td><td>Cities lacking curb inventories face enforcement inefficiencies</td><td>Riverton's 350K+ block-level rules are unmanageable manually</td></tr>
+          <tr><td><strong>Manville & Pinski (2021)</strong></td><td>Over 40% of parked vehicles don't pay; only 10% of violators are cited</td><td>Confirms enforcement gaps create revenue risk</td></tr>
+          <tr><td><strong>Biyik et al. (2021)</strong></td><td>Integrated smart parking systems outperform fragmented deployments</td><td>Supports our unified PMS architecture</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="sec-title"><div class="dot"></div>What NYC Data Confirmed</div>
@@ -455,6 +479,29 @@ tbody tr:hover { background: #F8FAFF; }
     </div>
 
     <div class="card">
+      <h3>Key Data Variables</h3>
+      <table>
+        <thead><tr><th>#</th><th>Variable</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Summons Number</td><td>Text</td><td>Unique citation identifier</td></tr>
+          <tr><td>2</td><td>Issue Date</td><td>Date</td><td>Date violation issued</td></tr>
+          <tr><td>3</td><td>Violation Code</td><td>Numeric</td><td>Type of parking violation (1-99)</td></tr>
+          <tr><td>4</td><td>Violation County</td><td>Text</td><td>Borough where violation occurred</td></tr>
+          <tr><td>5</td><td>Fine Amount</td><td>Numeric</td><td>Dollar amount of fine ($35-$515)</td></tr>
+          <tr><td>6</td><td>Payment Amount</td><td>Numeric</td><td>Amount paid toward violation</td></tr>
+          <tr><td>7</td><td>Amount Due</td><td>Numeric</td><td>Remaining balance after payments</td></tr>
+          <tr><td>8</td><td>Complaint Type</td><td>Text</td><td>311 complaint category (Illegal Parking, Blocked Driveway)</td></tr>
+          <tr><td>9</td><td>Borough</td><td>Text</td><td>NYC borough (5 boroughs)</td></tr>
+          <tr><td>10</td><td>Temperature Max</td><td>Numeric</td><td>Daily high temperature (Fahrenheit)</td></tr>
+          <tr><td>11</td><td>Precipitation</td><td>Numeric</td><td>Daily rainfall (millimeters)</td></tr>
+          <tr><td>12</td><td>Snowfall</td><td>Numeric</td><td>Daily snowfall (centimeters)</td></tr>
+          <tr><td>13</td><td>Ridership</td><td>Numeric</td><td>Hourly subway passenger count</td></tr>
+          <tr><td>14</td><td>Regulation Type</td><td>Text</td><td>Parking sign rule (no parking, metered, etc.)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
       <h3>Data Cleaning</h3>
       <p>We cleaned all 17 datasets using pandas: removed duplicates, dropped records missing key fields (about 2-3% of records), standardized all dates to YYYY-MM-DD, filtered 311 data to parking-related complaints only, and converted string columns to proper numeric types for aggregation.</p>
     </div>
@@ -474,24 +521,34 @@ tbody tr:hover { background: #F8FAFF; }
       </div>
     </div>
 
-    <div class="sec-title"><div class="dot"></div>Key Insights from the Data</div>
-    <div class="grid-2">
-      <div class="card">
-        <h3>Enforcement is concentrated, not distributed</h3>
-        <p>Manhattan and Brooklyn account for over 60% of all citations while outer boroughs are under-served. The hourly chart shows enforcement peaks between 10am-2pm and drops to zero by 7pm, meaning overnight violations go completely unenforced.</p>
-      </div>
-      <div class="card">
-        <h3>Revenue leakage is structural, not occasional</h3>
-        <p>Every single month, the stacked bar chart shows a significant red section (outstanding revenue). 42% of fines are never collected: 27% unpaid with nobody following up, 15% disputed. This isn't one bad quarter. It's consistent.</p>
-      </div>
-      <div class="card">
-        <h3>More enforcement doesn't mean happier citizens</h3>
-        <p>311 complaints grow 8% annually. The boroughs with the most enforcement also have the most complaints. More tickets aren't making people happier. The problem is the system, not the effort.</p>
-      </div>
-      <div class="card">
-        <h3>External factors are invisible to the current system</h3>
-        <p>Cold weather cuts enforcement by 50% or more. Events create parking spikes. Areas with less transit have more parking demand. The current system uses the same schedule regardless, wasting resources.</p>
-      </div>
+    <div class="sec-title"><div class="dot"></div>Executive Overview</div>
+    <div class="card">
+      <div class="img-block"><img src="dashboard images/Executive Overview.jpg" alt="Executive Overview"><div class="cap">Executive Overview: KPI cards, borough distribution, monthly trends, payment status</div></div>
+      <p>Brooklyn leads with 5,754 citations, nearly 1.5x more than Manhattan. These two boroughs together account for over half of all enforcement while Queens, Bronx, and Staten Island are under-served. The city issued 20,000 citations and received 20,000 complaints, meaning enforcement activity isn't reducing citizen frustration. The monthly trend shows two seasonal spikes (June and October) but near-zero activity in winter. 65% of citations are paid, but 34% carry late penalties, indicating people are paying late because there's no automated reminder system. The 107% collection rate is misleading as it's inflated by $182K in penalty fees, not efficient on-time collection.</p>
+    </div>
+
+    <div class="sec-title"><div class="dot"></div>Enforcement Dashboard</div>
+    <div class="card">
+      <div class="img-block"><img src="dashboard images/Enforcement Dashboard.jpg" alt="Enforcement Dashboard"><div class="cap">Enforcement: Hourly patterns, precinct breakdown with wrongful citations, borough distribution</div></div>
+      <p>Peak enforcement happens at 1pm with 1,017 citations. By 9pm it drops to nearly zero, meaning 75% of the day has little to no enforcement. Yet overnight violations like blocked driveways are among the top citizen complaints. Every precinct shows wrongful citations (the red bars), tickets given to cars with valid permits because the officer's device hadn't synced. The top 3 precincts handle nearly half of all citations while others are under-staffed. Brooklyn leads at nearly 6,000 citations, confirming enforcement is geographically stuck in familiar patterns rather than distributed based on actual demand.</p>
+    </div>
+
+    <div class="sec-title"><div class="dot"></div>Revenue & Finance</div>
+    <div class="card">
+      <div class="img-block"><img src="dashboard images/Revenue & Finance.jpg" alt="Revenue & Finance"><div class="cap">Revenue: Monthly collected vs outstanding, revenue by violation type, penalties summary</div></div>
+      <p>The city issued $1,265K in fines but collected $1,356K because $182K in late penalties inflated the total. Monthly revenue swings wildly with April at $120K and August near zero, following the same seasonal enforcement patterns. Photo School Zone Speed Violations generate roughly $280K in revenue, nearly double any other violation type, showing that automated enforcement is more consistent and profitable than manual officer patrols. The $12K outstanding balance may look small, but in Riverton's full-scale system this gap accumulates every month with no automated follow-up.</p>
+    </div>
+
+    <div class="sec-title"><div class="dot"></div>Citizen Experience</div>
+    <div class="card">
+      <div class="img-block"><img src="dashboard images/Citizen Experience.jpg" alt="Citizen Experience"><div class="cap">Citizens: 311 complaints by type, monthly trend, borough distribution</div></div>
+      <p>Only two complaint types dominate: Illegal Parking (~13,000) and Blocked Driveway (~7,000). These are residents calling to say someone is parked where they shouldn't be and nobody is doing anything about it. The trend is flat most of the year then explodes in October-November to nearly 20,000, a seasonal surge the current system can't predict. Brooklyn and Queens lead complaints at roughly 7,500 each, but Brooklyn also leads in citations. The borough getting the most enforcement is also generating the most complaints, proving that more tickets don't solve the underlying problem.</p>
+    </div>
+
+    <div class="sec-title"><div class="dot"></div>External Factors</div>
+    <div class="card">
+      <div class="img-block"><img src="dashboard images/External Factors.jpg" alt="External Factors"><div class="cap">External: Weather vs citations, events, transit ridership, population</div></div>
+      <p>The weather scatter shows citations clustered near zero regardless of temperature, demonstrating how inconsistent enforcement is under the legacy system. Sport Youth events dominate at roughly 13,000 permits, each removing parking spots and creating demand spikes the city can't anticipate. Manhattan has 430K+ subway riders while Staten Island has almost none, yet Staten Island gets the least enforcement despite higher parking demand from car-dependent residents. The current system responds to none of these external factors, using the same fixed schedule year-round.</p>
     </div>
   </div>
 </div>
@@ -550,6 +607,45 @@ tbody tr:hover { background: #F8FAFF; }
     </div>
 
     <div class="card">
+      <h3>Project Charter Summary</h3>
+      <table>
+        <thead><tr><th>Item</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Project Title</strong></td><td>Riverton Parking Management System (PMS)</td></tr>
+          <tr><td><strong>Sponsor</strong></td><td>Dr. Tatiana Cardona, Information Systems Dept., Saint Louis University</td></tr>
+          <tr><td><strong>Project Manager</strong></td><td>Vani Meenakshi Kalva</td></tr>
+          <tr><td><strong>Scope</strong></td><td>Single-city deployment, cloud-based, 12-15 month phased rollout with legacy parallel-run</td></tr>
+          <tr><td><strong>Budget</strong></td><td>Academic project, all free/open-source tools (Next.js, Vercel, NYC Open Data, Python)</td></tr>
+        </tbody>
+      </table>
+      <h4 style="font-size:12px; font-weight:600; color:var(--text); margin:12px 0 6px;">Milestones</h4>
+      <table>
+        <thead><tr><th>Milestone</th><th>Deliverable</th><th>Timeline</th></tr></thead>
+        <tbody>
+          <tr><td>Problem Definition & Research</td><td>Problem Statement and Research Summary</td><td>Weeks 1-2</td></tr>
+          <tr><td>Solution Statement & Architecture</td><td>Solution statement and enterprise architecture</td><td>Weeks 3-4</td></tr>
+          <tr><td>Dataset Collection & Validation</td><td>17 real datasets from NYC Open Data</td><td>Weeks 5-6</td></tr>
+          <tr><td>Data Analysis Plan (DPAD)</td><td>Analysis goals, ERD, visualization plan</td><td>Week 7</td></tr>
+          <tr><td>Project Charter</td><td>Scope, objectives, milestones, risks</td><td>Week 8</td></tr>
+          <tr><td>Dashboard Development</td><td>Interactive Next.js/Recharts dashboard on Vercel</td><td>Weeks 9-12</td></tr>
+          <tr><td>Review & QA</td><td>Testing, feedback, refinement</td><td>Weeks 13-14</td></tr>
+          <tr><td>Final Report & Presentation</td><td>Written report and live presentation</td><td>Weeks 15-16</td></tr>
+        </tbody>
+      </table>
+      <h4 style="font-size:12px; font-weight:600; color:var(--text); margin:12px 0 6px;">Risks & Mitigation</h4>
+      <table>
+        <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>Poor data quality</td><td>Full early profiling, clean up before migration</td></tr>
+          <tr><td>Integration delays</td><td>Phased integration, early dependency identification</td></tr>
+          <tr><td>User resistance</td><td>Training, frontline user engagement in design</td></tr>
+          <tr><td>Scope creep</td><td>Formal change approval by sponsor</td></tr>
+          <tr><td>Privacy/compliance issues</td><td>Pre-go-live policy review, audit logging, role-based access</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
       <h3>Tools & Platforms (SBB)</h3>
       <div class="img-block"><img src="images/4_sbb_tools.png" alt="SBB"><div class="cap">Solution Building Blocks: Frontend, Data Processing, Sources, Deployment, Visualization, Framework</div></div>
     </div>
@@ -587,6 +683,17 @@ tbody tr:hover { background: #F8FAFF; }
       <div class="cmp-card"><div class="cmp-label">Dispute Rate</div><div class="cmp-vals"><div class="cmp-v bad"><div class="tag">AS-IS</div><div class="val">14.7%</div></div><div class="cmp-v good"><div class="tag">TO-BE</div><div class="val">4.1%</div></div></div></div>
     </div>
 
+    <div class="sec-title"><div class="dot"></div>Comparison Dashboard Screenshots</div>
+    <div class="card">
+      <div class="img-block"><img src="dashboard images/AS-IS vs TO-BE Comparison 1.jpg" alt="Comparison Top"><div class="cap">AS-IS vs TO-BE: KPI compare cards, monthly revenue collected, outstanding revenue, wrongful citations by zone, violation type volume</div></div>
+      <p>Collection rate jumps from 58% to 87%, recovering 29 cents more on every dollar. Wrongful citations drop from 16% to 2% because real-time sync eliminates the 6-8 hour data gap. Permit processing shrinks from 7.99 days to 1.3 hours. The teal bars (TO-BE) beat the red bars (AS-IS) in revenue collected every single month. Outstanding revenue drops dramatically. Every zone's wrongful rate drops from 15-26% to roughly 2%, proving the improvement is systemic across all areas.</p>
+    </div>
+
+    <div class="card">
+      <div class="img-block"><img src="dashboard images/AS-IS vs TO-BE Comparison 2.jpg" alt="Comparison Bottom"><div class="cap">Capability maturity radar, revenue trend line, metric progress cards, ROI projection, risk register, implementation timeline</div></div>
+      <p>The TOGAF capability maturity radar scores the system across six dimensions from 1 to 5. The red shape (AS-IS) shows scores of 1-3, while the teal shape (TO-BE) reaches 4-5 across all dimensions. The revenue collection trend line shows TO-BE consistently above AS-IS month over month. The $2.8 million investment breaks even by mid-Year 2 and generates $4.8 million in annual savings by Year 5. The risk register identifies six risks with mitigation strategies, from data migration errors to citizen adoption challenges.</p>
+    </div>
+
     <div class="card" style="margin-top:12px;">
       <h3>AS-IS vs TO-BE Architecture</h3>
       <div class="img-block"><img src="images/3_asis_vs_tobe.png" alt="AS-IS vs TO-BE"><div class="cap">Current state to proposed transformation</div></div>
@@ -597,19 +704,19 @@ tbody tr:hover { background: #F8FAFF; }
     </div>
 
     <div class="grid-2">
-      <div class="card" style="">
+      <div class="card">
         <h3>AS-IS Rules (Data 1)</h3>
-        <p>Permit processing: 4-12 days (avg 8). Wrongful rate: 15.2%. Collection: 58% collected, 27% unpaid, 15% disputed. Sync: 15% complete, 40% delayed, 45% batch. Payment delay: 10-90 days.</p>
+        <p>Permit processing: 4-12 days (avg 8). Wrongful rate: 15.2%. Collection: 58% collected, 27% unpaid, 15% disputed. Sync: 15% complete, 40% delayed, 45% batch. Payment delay: 10-90 days. Date range: 2022-2024. 5,000 records generated with Python.</p>
       </div>
-      <div class="card" style="">
+      <div class="card">
         <h3>TO-BE Rules (Data 2)</h3>
-        <p>Permit processing: 0.5-2 hours. Wrongful rate: 2%. Collection: 88% collected, 8% unpaid, 4% disputed. Sync: 95% real-time. Payment delay: 1-20 days.</p>
+        <p>Permit processing: 0.5-2 hours. Wrongful rate: 2%. Collection: 88% collected, 8% unpaid, 4% disputed. Sync: 95% real-time. Payment delay: 1-20 days. Date range: 2025-2027. Same 25 columns as Data 1 for fair comparison.</p>
       </div>
     </div>
 
     <div class="card">
       <h3>ROI Projection</h3>
-      <p>The initial investment is $2.8 million. The ROI chart on the comparison dashboard shows break-even by mid-Year 2, with $4.8 million in annual savings by Year 5 from improved collection rates, reduced wrongful citation costs, and eliminated manual processing.</p>
+      <p>The initial investment is $2.8 million broken down as: cloud infrastructure ($800K), software licenses ($600K), implementation staff ($900K), training ($300K), and data migration ($200K). The ROI chart shows break-even by mid-Year 2, with $4.8 million in annual savings by Year 5 from improved collection rates, reduced wrongful citation costs, and eliminated manual processing.</p>
     </div>
   </div>
 </div>

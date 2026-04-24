@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riverton PMS | Parking Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #2563EB; --blue-hover: #1D4ED8; --blue-light: rgba(37,99,235,0.06);
+  --teal: #0D9488; --coral: #DC2626; --gold: #D97706; --dark: #1E293B;
+  --bg: #EEF2F7; --card: #FFFFFF; --border: #E0E4EA;
+  --text: #333; --muted: #666; --faint: #999;
+  --sidebar-w: 240px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--text); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C8CDD3; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #A0A8B0; }
+
+/* ── Landing / Role Select ───────────── */
+.landing {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: linear-gradient(165deg, #E8EEF5 0%, #EEF2F7 40%, #F2F0EC 100%);
+  padding: 48px 24px; position: relative; overflow: hidden;
+}
+.landing::before {
+  content: ""; position: absolute; top: -120px; right: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,120,212,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.landing::after {
+  content: ""; position: absolute; bottom: -100px; left: -60px;
+  width: 350px; height: 350px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(1,184,170,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.landing-brand { text-align: center; margin-bottom: 44px; position: relative; }
+.landing-brand .logo-mark {
+  width: 48px; height: 48px; margin: 0 auto 18px; position: relative;
+}
+.landing-brand .logo-mark svg { width: 48px; height: 48px; }
+.landing-brand .brand-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 8px; font-family: "Inter", sans-serif;
+}
+.landing-brand h1 {
+  font-size: 32px; font-weight: 700; color: var(--text);
+  font-family: "DM Sans", sans-serif; letter-spacing: -0.5px; margin-bottom: 8px;
+}
+.landing-brand .brand-sub {
+  font-size: 14px; color: var(--muted); font-weight: 400; line-height: 1.6;
+}
+
+.role-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 840px; width: 100%; position: relative; }
+
+.role-card {
+  background: #fff; border-radius: 14px; padding: 0; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid rgba(0,0,0,0.06); overflow: hidden; position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+}
+.role-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.04);
+  border-color: transparent;
+}
+.role-card .rc-accent { display: none; }
+.role-card .rc-body { padding: 28px 24px 24px; display: flex; flex-direction: column; height: 100%; }
+.role-card .rc-features { flex: 1; }
+.role-card .rc-icon-wrap {
+  width: 48px; height: 48px; border-radius: 12px; margin-bottom: 18px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.role-card .rc-icon-wrap svg { width: 24px; height: 24px; stroke-width: 1.5; }
+.role-card h3 {
+  font-size: 17px; font-weight: 600; margin-bottom: 8px; color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+.role-card .rc-desc { font-size: 13px; color: var(--muted); line-height: 1.55; margin-bottom: 18px; }
+.role-card .rc-divider { height: 1px; background: #F0F0F0; margin-bottom: 16px; }
+.role-card .rc-features { text-align: left; }
+.role-card .rc-feat {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; color: var(--muted); padding: 5px 0;
+}
+.role-card .rc-feat svg {
+  width: 14px; height: 14px; flex-shrink: 0; stroke-width: 2;
+}
+.role-card .rc-enter {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 20px; padding-top: 16px; border-top: 1px solid #F0F0F0;
+  font-size: 12px; font-weight: 600; color: var(--faint);
+  transition: color 0.2s;
+}
+.role-card:hover .rc-enter { color: var(--text); }
+.role-card .rc-enter svg { width: 16px; height: 16px; transition: transform 0.2s; }
+.role-card:hover .rc-enter svg { transform: translateX(4px); }
+
+/* Card-specific accents */
+.role-card.citizen-card .rc-accent { background: linear-gradient(90deg, var(--blue), #3AA0F0); }
+.role-card.citizen-card .rc-icon-wrap { background: rgba(0,120,212,0.08); }
+.role-card.citizen-card .rc-icon-wrap svg { stroke: var(--blue); fill: none; }
+.role-card.citizen-card .rc-feat svg { stroke: var(--blue); fill: none; }
+.role-card.citizen-card:hover { border-color: rgba(0,120,212,0.2); }
+
+.role-card.officer-card .rc-accent { background: linear-gradient(90deg, var(--teal), #40D4C6); }
+.role-card.officer-card .rc-icon-wrap { background: rgba(1,184,170,0.08); }
+.role-card.officer-card .rc-icon-wrap svg { stroke: var(--teal); fill: none; }
+.role-card.officer-card .rc-feat svg { stroke: var(--teal); fill: none; }
+.role-card.officer-card:hover { border-color: rgba(1,184,170,0.2); }
+
+.role-card.admin-card .rc-accent { background: linear-gradient(90deg, var(--dark), #556B73); }
+.role-card.admin-card .rc-icon-wrap { background: rgba(55,70,73,0.07); }
+.role-card.admin-card .rc-icon-wrap svg { stroke: var(--dark); fill: none; }
+.role-card.admin-card .rc-feat svg { stroke: var(--dark); fill: none; }
+.role-card.admin-card:hover { border-color: rgba(55,70,73,0.15); }
+
+.landing-footer {
+  margin-top: 44px; font-size: 11px; color: var(--faint); text-align: center;
+  position: relative; line-height: 1.8;
+}
+.landing-footer a {
+  color: var(--blue); text-decoration: none; font-weight: 500;
+  transition: color 0.15s;
+}
+.landing-footer a:hover { color: var(--blue-hover); }
+
+/* Stagger animation */
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.role-card { animation: cardReveal 0.5s ease-out forwards; opacity: 0; }
+.role-card:nth-child(1) { animation-delay: 0.1s; }
+.role-card:nth-child(2) { animation-delay: 0.2s; }
+.role-card:nth-child(3) { animation-delay: 0.3s; }
+@keyframes brandReveal {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.landing-brand { animation: brandReveal 0.6s ease-out forwards; }
+
+/* ── Sidebar ─────────────────────────── */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar-w);
+  background: #FAFBFC; border-right: 1px solid #EAECF0;
+  display: flex; flex-direction: column; z-index: 50; overflow-y: auto;
+  display: none;
+}
+.sidebar.visible { display: flex; }
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: #D0D5DD; border-radius: 10px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: #98A2B3; }
+.sidebar-header {
+  padding: 18px 18px; border-bottom: 1px solid #EAECF0;
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-header .logo {
+  width: 30px; height: 30px; border-radius: 8px; background: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12px; color: #fff;
+}
+.sidebar-header .txt { color: var(--text); }
+.sidebar-header .txt .name { font-size: 13px; font-weight: 600; font-family: "DM Sans", sans-serif; }
+.sidebar-header .txt .sub { font-size: 9px; color: var(--faint); letter-spacing: 0.3px; }
+
+/* User profile */
+.user-profile {
+  padding: 14px 18px; border-bottom: 1px solid #EAECF0;
+  display: flex; align-items: center; gap: 11px;
+}
+.user-avatar {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--blue), #60A5FA);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.5px;
+}
+.user-info .uname { font-size: 12px; font-weight: 600; color: var(--text); font-family: "DM Sans", sans-serif; }
+.user-info .uplate { font-size: 10px; color: #94A3B8; font-family: monospace; letter-spacing: 0.3px; }
+
+/* Nav sections */
+.nav-section { padding: 10px 10px 4px; }
+.nav-label { font-size: 9px; font-weight: 600; color: #94A3B8; text-transform: uppercase; letter-spacing: 1.2px; padding: 0 10px; margin-bottom: 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+  border-radius: 8px; font-size: 12px; color: #64748B;
+  cursor: pointer; transition: all 0.2s; margin-bottom: 1px;
+}
+.nav-item:hover { background: #F1F5F9; color: var(--text); }
+.nav-item.active { background: var(--blue); color: #fff; font-weight: 500; box-shadow: 0 1px 3px rgba(37,99,235,0.3); }
+.nav-item svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; flex-shrink: 0; }
+.nav-badge { margin-left: auto; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 10px; background: #EF4444; color: #fff; }
+
+/* Role tabs at bottom */
+.role-switch { padding: 10px 10px; border-top: 1px solid #EAECF0; margin-top: auto; }
+.role-switch .nav-label { margin-bottom: 6px; }
+.role-chip {
+  display: flex; align-items: center; gap: 8px; padding: 7px 12px;
+  border-radius: 8px; font-size: 11px; color: #64748B;
+  cursor: pointer; transition: all 0.15s; margin-bottom: 2px;
+}
+.role-chip:hover { background: #F1F5F9; color: var(--text); }
+.role-chip.active { background: #EFF6FF; color: var(--blue); font-weight: 600; }
+.role-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+.sidebar-footer { padding: 12px 18px; border-top: 1px solid #EAECF0; }
+.sync-status { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--teal); font-weight: 500; }
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* ── Main ────────────────────────────── */
+.main { margin-left: var(--sidebar-w); min-height: 100vh; display: none; background: #F8FAFC; }
+.main.visible { display: block; }
+.topbar {
+  background: #fff; border-bottom: 1px solid #EAECF0;
+  padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 40;
+}
+.topbar h1 { font-size: 16px; font-weight: 600; font-family: "DM Sans", sans-serif; color: var(--text); }
+.topbar .breadcrumb { font-size: 11px; color: #94A3B8; }
+.content { padding: 24px 28px 60px; }
+
+/* ── Cards ────────────────────────────── */
+.card {
+  background: #fff; border-radius: 12px; border: 1px solid #F1F5F9;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 22px 24px; margin-bottom: 14px;
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.card h3 { font-size: 14px; font-weight: 600; margin-bottom: 14px; font-family: "DM Sans", sans-serif; color: var(--text); }
+
+/* ── Stat cards ──────────────────────── */
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 18px; }
+.stat-card {
+  background: #fff; border-radius: 12px; border: 1px solid #F1F5F9;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 18px 20px;
+  transition: all 0.2s;
+}
+.stat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); transform: translateY(-1px); }
+.stat-card .stat-label { font-size: 11px; color: #94A3B8; margin-bottom: 8px; font-weight: 500; }
+.stat-card .stat-value { font-size: 26px; font-weight: 700; font-family: "DM Sans", sans-serif; }
+.stat-card .stat-sub { font-size: 10px; color: #94A3B8; margin-top: 4px; }
+.stat-card .stat-bar { height: 3px; border-radius: 2px; background: #F1F5F9; margin-top: 10px; }
+.stat-card .stat-bar-fill { height: 3px; border-radius: 2px; }
+
+/* ── CSS Charts ──────────────────────── */
+.bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; padding-top: 10px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bar { width: 100%; border-radius: 3px 3px 0 0; transition: height 0.3s; min-height: 2px; }
+.bar-label { font-size: 9px; color: var(--faint); }
+
+.mini-chart { display: flex; align-items: flex-end; gap: 3px; height: 40px; }
+.mini-bar { flex: 1; border-radius: 2px 2px 0 0; background: var(--blue); opacity: 0.6; }
+
+/* ── Quick actions ───────────────────── */
+.actions-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 18px; }
+.action-card {
+  background: #fff; border-radius: 12px; border: 1px solid #F1F5F9;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  padding: 24px 20px; text-align: center; cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.action-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); border-color: #E2E8F0; }
+.action-icon { width: 44px; height: 44px; border-radius: 12px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #fff; }
+.action-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; font-family: "DM Sans", sans-serif; }
+.action-card p { font-size: 11px; color: #94A3B8; }
+
+/* ── Activity feed ───────────────────── */
+.activity-item { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid #F1F5F9; }
+.activity-item:last-child { border: none; }
+.activity-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.activity-text { font-size: 12px; color: #334155; }
+.activity-time { font-size: 10px; color: #94A3B8; margin-top: 2px; }
+
+/* ── Forms ────────────────────────────── */
+.form-grid { display: grid; gap: 14px; }
+.form-grid-2 { grid-template-columns: 1fr 1fr; }
+.form-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.form-group label { font-size: 11px; font-weight: 600; color: #475569; display: block; margin-bottom: 5px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 10px 14px; border: 1px solid #E2E8F0; border-radius: 8px;
+  font-size: 13px; font-family: "Inter", sans-serif; outline: none;
+  transition: all 0.2s; background: #fff;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+/* ── Buttons ─────────────────────────── */
+.btn {
+  padding: 10px 22px; border: none; border-radius: 8px; font-size: 13px;
+  font-weight: 600; cursor: pointer; transition: all 0.2s;
+  font-family: "Inter", sans-serif;
+}
+.btn-blue { background: var(--blue); color: #fff; box-shadow: 0 1px 2px rgba(37,99,235,0.2); }
+.btn-blue:hover { background: var(--blue-hover); box-shadow: 0 2px 8px rgba(37,99,235,0.3); transform: translateY(-1px); }
+.btn-teal { background: var(--teal); color: #fff; box-shadow: 0 1px 2px rgba(13,148,136,0.2); }
+.btn-teal:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(13,148,136,0.3); }
+.btn-coral { background: #EF4444; color: #fff; box-shadow: 0 1px 2px rgba(239,68,68,0.2); }
+.btn-coral:hover { transform: translateY(-1px); }
+.btn-ghost { background: #F8FAFC; color: #475569; border: 1px solid #E2E8F0; }
+.btn-ghost:hover { background: #F1F5F9; }
+.btn-sm { padding: 5px 12px; font-size: 11px; border-radius: 6px; }
+
+/* ── Tables ───────────────────────────── */
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead th { background: #F8FAFC; padding: 10px 12px; text-align: left; font-weight: 600; color: #475569; border-bottom: 1px solid #E2E8F0; font-size: 11px; }
+tbody td { padding: 10px 12px; border-bottom: 1px solid #F1F5F9; color: #64748B; }
+tbody tr { transition: background 0.15s; }
+tbody tr:hover { background: #F8FAFC; }
+
+/* ── Badge ────────────────────────────── */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 600; }
+.badge-green { background: #ECFDF5; color: #059669; }
+.badge-red { background: #FEF2F2; color: #DC2626; }
+.badge-yellow { background: #FFFBEB; color: #D97706; }
+.badge-blue { background: #EFF6FF; color: var(--blue); }
+
+/* ── Result cards ────────────────────── */
+.result-card { border-radius: 12px; overflow: hidden; margin-top: 16px; }
+.result-header { padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+.result-header .icon { font-size: 18px; font-weight: 700; }
+.result-header h4 { font-size: 15px; font-weight: 700; font-family: "DM Sans", sans-serif; }
+.result-header p { font-size: 12px; opacity: 0.8; }
+.result-body { padding: 18px 20px; }
+.result-valid .result-header { background: linear-gradient(135deg, #059669, #0D9488); color: #fff; }
+.result-warn .result-header { background: linear-gradient(135deg, #D97706, #F59E0B); color: #fff; }
+.result-none .result-header { background: linear-gradient(135deg, #DC2626, #EF4444); color: #fff; }
+
+/* ── Info row ────────────────────────── */
+.info-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+.info-card { background: #F8FAFC; border-radius: 8px; padding: 12px 14px; border: 1px solid #F1F5F9; }
+.info-card .lbl { font-size: 10px; color: #94A3B8; margin-bottom: 3px; }
+.info-card .val { font-size: 14px; font-weight: 600; font-family: "DM Sans", sans-serif; }
+
+/* ── Success ─────────────────────────── */
+.success { text-align: center; padding: 40px 20px; }
+.success .s-icon { width: 56px; height: 56px; border-radius: 14px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; }
+.success h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; font-family: "DM Sans", sans-serif; }
+.success p { font-size: 13px; color: #64748B; }
+
+/* ── Timeline ────────────────────────── */
+.timeline { padding-left: 20px; }
+.tl-step { display: flex; gap: 12px; margin-bottom: 16px; position: relative; }
+.tl-dot { position: absolute; left: -16px; top: 4px; width: 10px; height: 10px; border-radius: 50%; }
+.tl-line { position: absolute; left: -12px; top: 14px; width: 2px; height: 20px; background: #E0E0E0; }
+.tl-time { font-size: 10px; color: var(--faint); font-family: monospace; }
+.tl-desc { font-size: 13px; }
+
+/* ── Sections ────────────────────────── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── Responsive ──────────────────────── */
+@media (max-width: 800px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .stats-row, .actions-grid, .form-grid-2, .form-grid-3, .form-grid-4, .info-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ LANDING ════════ -->
+<div class="landing" id="landing">
+  <div class="landing-brand">
+    <div class="logo-mark">
+      <svg viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="12" fill="#0078D4"/>
+        <path d="M16 16h6a6 6 0 010 12h-6V16z" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="19" cy="22" r="2" fill="#fff" opacity="0.5"/>
+        <path d="M28 32V16" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+        <path d="M32 32V16" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.15"/>
+      </svg>
+    </div>
+    <div class="brand-label">City of Riverton</div>
+    <h1>Parking Management System</h1>
+    <div class="brand-sub">Unified platform for permits, enforcement, and city operations</div>
+  </div>
+
+  <div class="role-cards">
+    <!-- Citizen -->
+    <div class="role-card citizen-card" onclick="enterApp('citizen')">
+      <div class="rc-accent"></div>
+      <div class="rc-body">
+        <div class="rc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h3>Citizen Portal</h3>
+        <p class="rc-desc">Manage permits, pay fines, find parking, and track everything from one place.</p>
+        <div class="rc-divider"></div>
+        <div class="rc-features">
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Apply for permits online</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Pay citations instantly</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Track permit status in real-time</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Find and reserve parking spots</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> File and track disputes</div>
+        </div>
+        <div class="rc-enter">
+          <span>Open Portal</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Officer -->
+    <div class="role-card officer-card" onclick="enterApp('officer')">
+      <div class="rc-accent"></div>
+      <div class="rc-body">
+        <div class="rc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Enforcement Officer</h3>
+        <p class="rc-desc">Verify permits instantly, issue citations, and manage your patrol in real-time.</p>
+        <div class="rc-divider"></div>
+        <div class="rc-features">
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Real-time permit verification</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Issue digital citations</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Shift activity log</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Live zone occupancy</div>
+        </div>
+        <div class="rc-enter">
+          <span>Open App</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin -->
+    <div class="role-card admin-card" onclick="enterApp('admin')">
+      <div class="rc-accent"></div>
+      <div class="rc-body">
+        <div class="rc-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3>City Administration</h3>
+        <p class="rc-desc">Approve permits, monitor city revenue, manage officers, and oversee operations.</p>
+        <div class="rc-divider"></div>
+        <div class="rc-features">
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Approve and reject permits</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Revenue dashboard</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> Officer activity monitoring</div>
+          <div class="rc-feat"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg> City-wide operations view</div>
+        </div>
+        <div class="rc-enter">
+          <span>Open Panel</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="landing-footer">
+    <p>City of Riverton Parking Management System | MRP Group 11 | IS-5960-02 | Saint Louis University</p>
+    <p style="margin-top:6px;"><a href="https://mrp-group-11.vercel.app" target="_blank">View Analytics Dashboard</a></p>
+    <p style="margin-top:4px;"><a href="#" onclick="localStorage.clear();location.reload();return false;">Reset Demo Data</a></p>
+  </div>
+</div>
+
+<!-- ════════ SIDEBAR ════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">P</div>
+    <div class="txt"><div class="name">Riverton PMS</div><div class="sub">Parking Management System</div></div>
+  </div>
+
+  <!-- Citizen profile (default) -->
+  <div class="user-profile" id="user-profile">
+    <div class="user-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" style="width:16px;height:16px;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="user-info"><div class="uname">Sowjanya Kavuri</div><div class="uplate">Plate: RVT-2847</div></div>
+  </div>
+
+  <nav id="nav-citizen">
+    <div class="nav-section">
+      <div class="nav-label">Dashboard</div>
+      <div class="nav-item active" onclick="showPage('c-home')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Overview
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Parking</div>
+      <div class="nav-item" onclick="showPage('c-find')">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Find Parking
+      </div>
+      <div class="nav-item" onclick="showPage('c-reserve')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Reserve a Spot
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Permits</div>
+      <div class="nav-item" onclick="showPage('c-permits')">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        My Permits
+      </div>
+      <div class="nav-item" onclick="showPage('c-apply')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Apply for Permit
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Payments</div>
+      <div class="nav-item" onclick="showPage('c-citations')">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        My Citations
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item" onclick="showPage('c-pay')">
+        <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Pay Fine
+      </div>
+      <div class="nav-item" onclick="showPage('c-receipts')">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        My Receipts
+      </div>
+      <div class="nav-item" onclick="showPage('c-dispute')">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        File a Dispute
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Account</div>
+      <div class="nav-item" onclick="showPage('c-account')">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Account
+      </div>
+      <div class="nav-item" onclick="showPage('c-help')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Help & Support
+      </div>
+    </div>
+  </nav>
+
+  <!-- Officer nav (hidden by default) -->
+  <nav id="nav-officer" style="display:none">
+    <div class="nav-section">
+      <div class="nav-label">Dashboard</div>
+      <div class="nav-item active" onclick="showPage('o-home')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Shift Dashboard
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Enforcement</div>
+      <div class="nav-item" onclick="showPage('o-lookup')">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Permit Lookup
+      </div>
+      <div class="nav-item" onclick="showPage('o-issue')">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        Issue Citation
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Operations</div>
+      <div class="nav-item" onclick="showPage('o-shift')">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Activity Log
+      </div>
+      <div class="nav-item" onclick="showPage('o-zones')">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Zone Status
+      </div>
+    </div>
+  </nav>
+
+  <!-- Admin nav (hidden by default) -->
+  <nav id="nav-admin" style="display:none">
+    <div class="nav-section">
+      <div class="nav-label">Dashboard</div>
+      <div class="nav-item active" onclick="showPage('a-home')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        City Overview
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Management</div>
+      <div class="nav-item" onclick="showPage('a-queue')">
+        <svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+        Permit Queue
+        <span class="nav-badge">8</span>
+      </div>
+      <div class="nav-item" onclick="showPage('a-revenue')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Revenue
+      </div>
+      <div class="nav-item" onclick="showPage('a-officers')">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Officers
+      </div>
+    </div>
+  </nav>
+
+  <!-- Role switcher -->
+  <div class="role-switch">
+    <div class="nav-label">Switch Role</div>
+    <div class="role-chip active" onclick="switchRole('citizen')"><div class="role-dot" style="background:var(--blue);"></div> Citizen Portal</div>
+    <div class="role-chip" onclick="switchRole('officer')"><div class="role-dot" style="background:var(--teal);"></div> Officer App</div>
+    <div class="role-chip" onclick="switchRole('admin')"><div class="role-dot" style="background:var(--gold);"></div> Admin Panel</div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="sync-status"><div class="sync-dot"></div> Real-time sync active</div>
+  </div>
+</aside>
+
+<!-- ════════ MAIN ════════ -->
+<div class="main">
+
+<div class="topbar">
+  <div>
+    <h1 id="page-title">Dashboard</h1>
+    <div class="breadcrumb" id="page-breadcrumb">Citizen Portal / Overview</div>
+  </div>
+  <div style="font-size:11px; color:var(--faint);">City of Riverton | Parking Management System</div>
+</div>
+
+<div class="content">
+
+<!-- ════ CITIZEN: HOME ════ -->
+<div class="page active" id="c-home">
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Active Permits</div>
+      <div class="stat-value" style="color:var(--teal);">2</div>
+      <div class="stat-sub">Zone A, Zone B</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:100%; background:var(--teal);"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pending Citations</div>
+      <div class="stat-value" style="color:var(--coral);">3</div>
+      <div class="stat-sub">$310 total outstanding</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:60%; background:var(--coral);"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Paid This Year</div>
+      <div class="stat-value" style="color:var(--blue);">$485</div>
+      <div class="stat-sub">5 citations resolved</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:75%; background:var(--blue);"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Next Permit Expiry</div>
+      <div class="stat-value" style="color:var(--gold);">47d</div>
+      <div class="stat-sub">Zone A expires Jun 12</div>
+      <div class="stat-bar"><div class="stat-bar-fill" style="width:30%; background:var(--gold);"></div></div>
+    </div>
+  </div>
+
+  <div class="actions-grid">
+    <div class="action-card" onclick="showPage('c-apply')">
+      <div class="action-icon" style="background:var(--blue);">+</div>
+      <h4>Apply for Permit</h4>
+      <p>Submit a new parking permit application</p>
+    </div>
+    <div class="action-card" onclick="showPage('c-pay')">
+      <div class="action-icon" style="background:var(--coral);">$</div>
+      <h4>Pay a Fine</h4>
+      <p>Pay outstanding citations online</p>
+    </div>
+    <div class="action-card" onclick="showPage('c-dispute')">
+      <div class="action-icon" style="background:var(--gold);">?</div>
+      <h4>File a Dispute</h4>
+      <p>Challenge a citation you believe is wrong</p>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+    <div class="card">
+      <h3>Payment History</h3>
+      <div class="bar-chart">
+        <div class="bar-col"><div class="bar" style="height:40%; background:var(--teal);"></div><div class="bar-label">Jan</div></div>
+        <div class="bar-col"><div class="bar" style="height:60%; background:var(--teal);"></div><div class="bar-label">Feb</div></div>
+        <div class="bar-col"><div class="bar" style="height:20%; background:var(--teal);"></div><div class="bar-label">Mar</div></div>
+        <div class="bar-col"><div class="bar" style="height:80%; background:var(--teal);"></div><div class="bar-label">Apr</div></div>
+        <div class="bar-col"><div class="bar" style="height:45%; background:var(--teal);"></div><div class="bar-label">May</div></div>
+        <div class="bar-col"><div class="bar" style="height:0%; background:var(--blue); opacity:0.3;"></div><div class="bar-label">Jun</div></div>
+        <div class="bar-col"><div class="bar" style="height:0%; background:var(--blue); opacity:0.3;"></div><div class="bar-label">Jul</div></div>
+        <div class="bar-col"><div class="bar" style="height:0%; background:var(--blue); opacity:0.3;"></div><div class="bar-label">Aug</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Recent Activity</h3>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--teal);"></div><div><div class="activity-text">Permit PRM-284701 renewed for Zone A</div><div class="activity-time">2 days ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--coral);"></div><div><div class="activity-text">Citation CIT-00489 issued - Double Parking</div><div class="activity-time">5 days ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--blue);"></div><div><div class="activity-text">Payment of $95 processed for CIT-00412</div><div class="activity-time">1 week ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--gold);"></div><div><div class="activity-text">Dispute filed for CIT-00388 - Under review</div><div class="activity-time">2 weeks ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--teal);"></div><div><div class="activity-text">Permit PRM-284623 approved for Zone B</div><div class="activity-time">3 weeks ago</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CITIZEN: FIND PARKING ════ -->
+<div class="page" id="c-find">
+  <div class="stats-row" style="grid-template-columns:repeat(5,1fr);">
+    <div class="stat-card"><div class="stat-label">Zone A - Downtown</div><div class="stat-value" style="color:var(--coral);">92%</div><div class="stat-sub">Nearly Full</div></div>
+    <div class="stat-card"><div class="stat-label">Zone B - University</div><div class="stat-value" style="color:var(--gold);">78%</div><div class="stat-sub">Moderate</div></div>
+    <div class="stat-card"><div class="stat-label">Zone C - Residential</div><div class="stat-value" style="color:var(--teal);">61%</div><div class="stat-sub">Available</div></div>
+    <div class="stat-card"><div class="stat-label">Zone D - Commercial</div><div class="stat-value" style="color:var(--coral);">85%</div><div class="stat-sub">High Demand</div></div>
+    <div class="stat-card"><div class="stat-label">Zone E - Waterfront</div><div class="stat-value" style="color:var(--teal);">45%</div><div class="stat-sub">Available</div></div>
+  </div>
+  <div class="card">
+    <h3>Zone Availability</h3>
+    <div class="bar-chart" style="height:160px;">
+      <div class="bar-col"><div class="bar" style="height:92%; background:var(--coral);"></div><div class="bar-label">Zone A</div></div>
+      <div class="bar-col"><div class="bar" style="height:78%; background:var(--gold);"></div><div class="bar-label">Zone B</div></div>
+      <div class="bar-col"><div class="bar" style="height:61%; background:var(--teal);"></div><div class="bar-label">Zone C</div></div>
+      <div class="bar-col"><div class="bar" style="height:85%; background:var(--coral);"></div><div class="bar-label">Zone D</div></div>
+      <div class="bar-col"><div class="bar" style="height:45%; background:var(--teal);"></div><div class="bar-label">Zone E</div></div>
+    </div>
+    <p style="font-size:11px; color:var(--faint); margin-top:12px; text-align:center;">Occupancy updated in real-time. Green zones have available spots.</p>
+  </div>
+  <div class="card">
+    <h3>Meter Rates by Zone</h3>
+    <table>
+      <thead><tr><th>Zone</th><th>Hourly Rate</th><th>Max Hours</th><th>Meters Available</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Zone A - Downtown</strong></td><td>$3.00/hr</td><td>2 hours</td><td>12 of 180</td><td><span class="badge badge-red">Limited</span></td></tr>
+        <tr><td><strong>Zone B - University</strong></td><td>$2.00/hr</td><td>4 hours</td><td>34 of 150</td><td><span class="badge badge-yellow">Moderate</span></td></tr>
+        <tr><td><strong>Zone C - Residential</strong></td><td>$1.50/hr</td><td>6 hours</td><td>68 of 120</td><td><span class="badge badge-green">Available</span></td></tr>
+        <tr><td><strong>Zone D - Commercial</strong></td><td>$2.50/hr</td><td>3 hours</td><td>18 of 140</td><td><span class="badge badge-yellow">Moderate</span></td></tr>
+        <tr><td><strong>Zone E - Waterfront</strong></td><td>$1.00/hr</td><td>8 hours</td><td>45 of 80</td><td><span class="badge badge-green">Available</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ CITIZEN: RESERVE ════ -->
+<div class="page" id="c-reserve">
+  <div class="card" id="reserve-form">
+    <h3>Reserve a Parking Spot</h3>
+    <div class="form-grid form-grid-2">
+      <div class="form-group"><label>Zone</label><select><option>Zone A - Downtown ($3.00/hr)</option><option>Zone B - University ($2.00/hr)</option><option>Zone C - Residential ($1.50/hr)</option><option>Zone D - Commercial ($2.50/hr)</option><option>Zone E - Waterfront ($1.00/hr)</option></select></div>
+      <div class="form-group"><label>Date</label><input type="date"></div>
+      <div class="form-group"><label>Start Time</label><input type="time" value="09:00"></div>
+      <div class="form-group"><label>Duration</label><select><option>1 hour</option><option>2 hours</option><option>3 hours</option><option>4 hours</option></select></div>
+    </div>
+    <div class="form-group" style="margin-top:14px"><label>Vehicle Plate</label><input value="RVT-2847" readonly style="background:#F8F8F8;"></div>
+    <div style="background:#F8F9FA; border-radius:6px; padding:12px 18px; margin:16px 0; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:13px; color:var(--muted);">Estimated Cost</span>
+      <span style="font-size:22px; font-weight:700; color:var(--blue);">$6.00</span>
+    </div>
+    <button class="btn btn-blue" onclick="reserveSpot()">Reserve Now</button>
+  </div>
+</div>
+
+<!-- ════ CITIZEN: MY PERMITS ════ -->
+<div class="page" id="c-permits">
+  <div class="card">
+    <h3>My Active Permits</h3>
+    <table>
+      <thead><tr><th>Permit ID</th><th>Zone</th><th>Type</th><th>Vehicle</th><th>Issued</th><th>Expires</th><th>Status</th></tr></thead>
+      <tbody id="permits-body">
+        <tr><td style="font-family:monospace; font-weight:600;">PRM-284701</td><td>Zone A - Downtown</td><td>Residential</td><td style="font-family:monospace;">RVT-2847</td><td>Jan 12, 2026</td><td style="color:var(--gold);">Jun 12, 2026</td><td><span class="badge badge-green">Active</span></td></tr>
+        <tr><td style="font-family:monospace; font-weight:600;">PRM-284623</td><td>Zone B - University</td><td>University</td><td style="font-family:monospace;">RVT-2847</td><td>Feb 01, 2026</td><td>Dec 31, 2026</td><td><span class="badge badge-green">Active</span></td></tr>
+        <tr><td style="font-family:monospace; font-weight:600;">PRM-271450</td><td>Zone A - Downtown</td><td>Residential</td><td style="font-family:monospace;">RVT-2847</td><td>Jan 15, 2025</td><td style="color:var(--coral);">Jan 14, 2026</td><td><span class="badge badge-red">Expired</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Permit Timeline</h3>
+    <div class="timeline">
+      <div class="tl-step"><div class="tl-dot" style="background:var(--teal);"></div><div class="tl-line"></div><div><div class="tl-time">Jan 12, 2026</div><div class="tl-desc">PRM-284701 issued for Zone A (Residential)</div></div></div>
+      <div class="tl-step"><div class="tl-dot" style="background:var(--teal);"></div><div class="tl-line"></div><div><div class="tl-time">Feb 01, 2026</div><div class="tl-desc">PRM-284623 issued for Zone B (University)</div></div></div>
+      <div class="tl-step"><div class="tl-dot" style="background:var(--gold);"></div><div><div class="tl-time">Jun 12, 2026</div><div class="tl-desc">PRM-284701 expires - renewal recommended</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CITIZEN: APPLY ════ -->
+<div class="page" id="c-apply">
+  <div class="card" id="apply-form">
+    <h3>New Permit Application</h3>
+    <div class="form-grid form-grid-2">
+      <div class="form-group"><label>First Name</label><input id="fn" placeholder="Sarah"></div>
+      <div class="form-group"><label>Last Name</label><input id="ln" placeholder="Kim"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="em" placeholder="sowjanya@email.com"></div>
+      <div class="form-group"><label>Phone</label><input placeholder="(555) 284-7100"></div>
+    </div>
+    <div class="form-grid" style="margin-top:14px"><div class="form-group"><label>Street Address</label><input placeholder="742 Riverton Boulevard"></div></div>
+    <div class="form-grid form-grid-2" style="margin-top:14px">
+      <div class="form-group"><label>City</label><input value="Riverton" disabled style="background:#F8F8F8;"></div>
+      <div class="form-group"><label>ZIP Code</label><input placeholder="62701"></div>
+    </div>
+    <h3 style="margin-top:20px; padding-top:16px; border-top:1px solid #eee;">Vehicle Information</h3>
+    <div class="form-grid form-grid-4">
+      <div class="form-group"><label>License Plate</label><input id="vplate" value="RVT-2847" style="font-family:monospace;"></div>
+      <div class="form-group"><label>Vehicle Make</label><input placeholder="Toyota"></div>
+      <div class="form-group"><label>Year</label><input placeholder="2023"></div>
+      <div class="form-group"><label>Color</label><input placeholder="Silver"></div>
+    </div>
+    <div class="form-grid form-grid-2" style="margin-top:14px">
+      <div class="form-group"><label>Parking Zone</label><select><option>Zone A - Downtown</option><option>Zone B - University</option><option>Zone C - Residential North</option><option>Zone D - Commercial</option><option>Zone E - Waterfront</option></select></div>
+      <div class="form-group"><label>Permit Type</label><select><option>Residential</option><option>Commercial</option><option>Visitor</option><option>Contractor</option><option>University</option></select></div>
+    </div>
+    <div style="margin-top:20px"><button class="btn btn-blue" onclick="submitApp()">Submit Application</button></div>
+  </div>
+  <div id="apply-success" style="display:none"></div>
+</div>
+
+<!-- ════ CITIZEN: CITATIONS ════ -->
+<div class="page" id="c-citations">
+  <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+    <div class="stat-card"><div class="stat-label">Unpaid Citations</div><div class="stat-value" style="color:var(--coral);">3</div><div class="stat-sub">$310 outstanding</div></div>
+    <div class="stat-card"><div class="stat-label">Paid This Year</div><div class="stat-value" style="color:var(--teal);">5</div><div class="stat-sub">$485 total paid</div></div>
+    <div class="stat-card"><div class="stat-label">Disputes Active</div><div class="stat-value" style="color:var(--gold);">1</div><div class="stat-sub">Under review</div></div>
+  </div>
+  <div class="card">
+    <h3>All Citations</h3>
+    <table>
+      <thead><tr><th>Citation ID</th><th>Date</th><th>Violation</th><th>Zone</th><th>Fine</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody id="citations-body">
+        <tr><td style="font-family:monospace;">CIT-00489</td><td>Apr 22, 2026</td><td>Double Parking</td><td>Zone A</td><td style="font-weight:600;">$115</td><td><span class="badge badge-red">Unpaid</span></td><td><button class="btn btn-teal btn-sm" onclick="showPage('c-pay')">Pay</button></td></tr>
+        <tr><td style="font-family:monospace;">CIT-00456</td><td>Apr 10, 2026</td><td>Expired Meter</td><td>Zone B</td><td style="font-weight:600;">$65</td><td><span class="badge badge-red">Unpaid</span></td><td><button class="btn btn-teal btn-sm" onclick="showPage('c-pay')">Pay</button></td></tr>
+        <tr><td style="font-family:monospace;">CIT-00431</td><td>Mar 28, 2026</td><td>No Parking - Street Cleaning</td><td>Zone A</td><td style="font-weight:600;">$130</td><td><span class="badge badge-red">Unpaid</span></td><td><button class="btn btn-teal btn-sm" onclick="showPage('c-pay')">Pay</button></td></tr>
+        <tr><td style="font-family:monospace;">CIT-00412</td><td>Mar 15, 2026</td><td>Overtime Parking</td><td>Zone D</td><td style="font-weight:600;">$65</td><td><span class="badge badge-green">Paid</span></td><td></td></tr>
+        <tr><td style="font-family:monospace;">CIT-00388</td><td>Feb 28, 2026</td><td>Wrong Zone</td><td>Zone C</td><td style="font-weight:600;">$132</td><td><span class="badge badge-yellow">Disputed</span></td><td></td></tr>
+        <tr><td style="font-family:monospace;">CIT-00350</td><td>Feb 10, 2026</td><td>Fire Hydrant</td><td>Zone A</td><td style="font-weight:600;">$200</td><td><span class="badge badge-green">Paid</span></td><td></td></tr>
+        <tr><td style="font-family:monospace;">CIT-00321</td><td>Jan 20, 2026</td><td>Blocking Driveway</td><td>Zone B</td><td style="font-weight:600;">$150</td><td><span class="badge badge-green">Paid</span></td><td></td></tr>
+        <tr><td style="font-family:monospace;">CIT-00298</td><td>Jan 05, 2026</td><td>No Standing</td><td>Zone A</td><td style="font-weight:600;">$115</td><td><span class="badge badge-green">Paid</span></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ CITIZEN: PAY ════ -->
+<div class="page" id="c-pay">
+  <div class="card" id="pay-form">
+    <h3>Pay a Fine</h3>
+    <div class="form-group" style="margin-bottom:14px"><label>Select Citation</label>
+      <select id="pay-select" onchange="updatePayAmount()">
+        <option value="115">CIT-00489 - Double Parking - $115</option>
+        <option value="65">CIT-00456 - Expired Meter - $65</option>
+        <option value="130">CIT-00431 - No Parking Street Cleaning - $130</option>
+      </select>
+    </div>
+    <div style="background:#F8F9FA; border-radius:6px; padding:14px 18px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:13px; color:var(--muted);">Amount Due</span>
+      <span id="pay-amount" style="font-size:24px; font-weight:700; color:var(--coral);">$115</span>
+    </div>
+    <h3 style="font-size:13px;">Payment Method</h3>
+    <div class="form-grid form-grid-2" style="margin-top:8px">
+      <div class="form-group" style="grid-column:1/-1"><label>Cardholder Name</label><input placeholder="Sowjanya Kavuri"></div>
+      <div class="form-group" style="grid-column:1/-1"><label>Card Number</label><input placeholder="4242 4242 4242 4242"></div>
+      <div class="form-group"><label>Expiry</label><input placeholder="MM/YY"></div>
+      <div class="form-group"><label>CVV</label><input placeholder="123"></div>
+    </div>
+    <div style="font-size:10px; color:var(--faint); margin:12px 0;">Secured: 256-bit SSL encryption | PCI DSS compliant</div>
+    <button class="btn btn-teal" onclick="processPayment()">Pay Now</button>
+  </div>
+  <div id="pay-success" style="display:none"></div>
+</div>
+
+<!-- ════ CITIZEN: RECEIPTS ════ -->
+<div class="page" id="c-receipts">
+  <div class="card">
+    <h3>Payment Receipts</h3>
+    <table>
+      <thead><tr><th>Receipt</th><th>Date</th><th>Citation</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+      <tbody id="receipts-body">
+        <tr><td style="font-family:monospace;">RCP-78901</td><td>Mar 16, 2026</td><td style="font-family:monospace;">CIT-00412</td><td style="font-weight:600; color:var(--teal);">$65</td><td>Visa ending 4242</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+        <tr><td style="font-family:monospace;">RCP-78845</td><td>Feb 11, 2026</td><td style="font-family:monospace;">CIT-00350</td><td style="font-weight:600; color:var(--teal);">$200</td><td>Visa ending 4242</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+        <tr><td style="font-family:monospace;">RCP-78790</td><td>Jan 22, 2026</td><td style="font-family:monospace;">CIT-00321</td><td style="font-weight:600; color:var(--teal);">$150</td><td>Mastercard ending 8899</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+        <tr><td style="font-family:monospace;">RCP-78742</td><td>Jan 06, 2026</td><td style="font-family:monospace;">CIT-00298</td><td style="font-weight:600; color:var(--teal);">$115</td><td>Visa ending 4242</td><td><span class="badge badge-green">Confirmed</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ CITIZEN: DISPUTE ════ -->
+<div class="page" id="c-dispute">
+  <div class="card" id="dispute-form">
+    <h3>File a Dispute</h3>
+    <div class="form-grid form-grid-2">
+      <div class="form-group"><label>Citation ID</label><select><option>CIT-00489 - Double Parking ($115)</option><option>CIT-00456 - Expired Meter ($65)</option><option>CIT-00431 - Street Cleaning ($130)</option></select></div>
+      <div class="form-group"><label>Reason</label><select><option>I had a valid permit at the time</option><option>Parking signs were unclear or missing</option><option>My vehicle was not at this location</option><option>Citation details are incorrect</option><option>I was loading/unloading (within allowed time)</option><option>Other</option></select></div>
+    </div>
+    <div class="form-group" style="margin-top:14px"><label>Detailed Explanation</label><textarea placeholder="Describe why you believe this citation was issued in error..."></textarea></div>
+    <div class="form-group" style="margin-top:14px"><label>Upload Evidence (optional)</label><input type="file"><p style="font-size:10px; color:var(--faint); margin-top:4px;">Photos of your permit, parking sign, or vehicle location. Max 10MB.</p></div>
+    <button class="btn btn-blue" style="margin-top:16px" onclick="submitDispute()">Submit Dispute</button>
+  </div>
+  <div id="dispute-success" style="display:none"></div>
+</div>
+
+<!-- ════ CITIZEN: ACCOUNT ════ -->
+<div class="page" id="c-account">
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+    <div class="card">
+      <h3>Personal Information</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Full Name</label><input value="Sowjanya Kavuri" readonly style="background:#F8F8F8;"></div>
+        <div class="form-group"><label>Email</label><input value="sowjanya.kavuri@email.com" readonly style="background:#F8F8F8;"></div>
+        <div class="form-group"><label>Phone</label><input value="(555) 284-7100" readonly style="background:#F8F8F8;"></div>
+        <div class="form-group"><label>Address</label><input value="742 Riverton Blvd, Riverton 62701" readonly style="background:#F8F8F8;"></div>
+      </div>
+      <button class="btn btn-ghost" style="margin-top:14px">Edit Profile</button>
+    </div>
+    <div class="card">
+      <h3>Registered Vehicles</h3>
+      <table>
+        <thead><tr><th>Plate</th><th>Make</th><th>Year</th><th>Color</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:monospace; font-weight:600;">RVT-2847</td><td>Toyota Camry</td><td>2023</td><td>Silver</td></tr>
+          <tr><td style="font-family:monospace; font-weight:600;">RVT-9103</td><td>Honda CR-V</td><td>2021</td><td>White</td></tr>
+        </tbody>
+      </table>
+      <button class="btn btn-ghost" style="margin-top:14px">Add Vehicle</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Saved Payment Methods</h3>
+    <table>
+      <thead><tr><th>Type</th><th>Number</th><th>Expiry</th><th>Default</th></tr></thead>
+      <tbody>
+        <tr><td>Visa</td><td style="font-family:monospace;">**** **** **** 4242</td><td>08/28</td><td><span class="badge badge-blue">Default</span></td></tr>
+        <tr><td>Mastercard</td><td style="font-family:monospace;">**** **** **** 8899</td><td>03/27</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ CITIZEN: HELP ════ -->
+<div class="page" id="c-help">
+  <div class="card">
+    <h3>Help & Support</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px;">
+      <div style="background:#F8F9FA; border-radius:6px; padding:16px;">
+        <h4 style="font-size:13px; font-weight:600; margin-bottom:6px;">Contact 311</h4>
+        <p style="font-size:12px; color:var(--muted);">Call 311 for non-emergency parking issues.</p>
+        <p style="font-size:12px; color:var(--muted);">Response time: <strong style="color:var(--teal);">< 4 hours</strong> (old: 58 hours)</p>
+      </div>
+      <div style="background:#F8F9FA; border-radius:6px; padding:16px;">
+        <h4 style="font-size:13px; font-weight:600; margin-bottom:6px;">Permit Office</h4>
+        <p style="font-size:12px; color:var(--muted);">Mon-Fri 8AM-5PM at City Hall, Room 102.</p>
+        <p style="font-size:12px; color:var(--muted);">Or use this portal for instant service.</p>
+      </div>
+      <div style="background:#F8F9FA; border-radius:6px; padding:16px;">
+        <h4 style="font-size:13px; font-weight:600; margin-bottom:6px;">FAQs</h4>
+        <p style="font-size:12px; color:var(--muted);">How long does a permit take? <strong style="color:var(--teal);">About 1.25 hours</strong></p>
+        <p style="font-size:12px; color:var(--muted);">Can I dispute online? <strong style="color:var(--teal);">Yes, under 4 hour response</strong></p>
+      </div>
+      <div style="background:#F8F9FA; border-radius:6px; padding:16px;">
+        <h4 style="font-size:13px; font-weight:600; margin-bottom:6px;">Emergency</h4>
+        <p style="font-size:12px; color:var(--muted);">Vehicle towed or booted? Call (555) 284-9111.</p>
+        <p style="font-size:12px; color:var(--muted);">Available 24/7.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ OFFICER: HOME ════ -->
+<div class="page" id="o-home">
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Citations Today</div><div class="stat-value" style="color:var(--blue);">5</div><div class="stat-sub">Zone A - Downtown</div><div class="mini-chart"><div class="mini-bar" style="height:30%;"></div><div class="mini-bar" style="height:50%;"></div><div class="mini-bar" style="height:45%;"></div><div class="mini-bar" style="height:80%;"></div><div class="mini-bar" style="height:60%;"></div><div class="mini-bar" style="height:100%;"></div><div class="mini-bar" style="height:40%;"></div></div></div>
+    <div class="stat-card"><div class="stat-label">Total Fines</div><div class="stat-value" style="color:var(--teal);">$625</div><div class="stat-sub">Avg $125 per citation</div><div class="stat-bar"><div class="stat-bar-fill" style="width:62%; background:var(--teal);"></div></div></div>
+    <div class="stat-card"><div class="stat-label">Permits Verified</div><div class="stat-value">12</div><div class="stat-sub">All verified in real-time</div><div class="stat-bar"><div class="stat-bar-fill" style="width:100%; background:var(--blue);"></div></div></div>
+    <div class="stat-card"><div class="stat-label">Wrongful Alerts</div><div class="stat-value" style="color:var(--teal);">0</div><div class="stat-sub">Real-time sync prevents errors</div><div class="stat-bar"><div class="stat-bar-fill" style="width:0%; background:var(--teal);"></div></div></div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+    <div class="card">
+      <h3>Today's Citations</h3>
+      <table>
+        <thead><tr><th>Time</th><th>Plate</th><th>Violation</th><th>Fine</th></tr></thead>
+        <tbody>
+          <tr><td>08:15</td><td style="font-family:monospace;">ABC-1234</td><td>Expired Meter</td><td style="color:var(--coral); font-weight:600;">$65</td></tr>
+          <tr><td>09:32</td><td style="font-family:monospace;">XYZ-5678</td><td>Double Parking</td><td style="color:var(--coral); font-weight:600;">$115</td></tr>
+          <tr><td>10:05</td><td style="font-family:monospace;">DEF-9012</td><td>Street Cleaning</td><td style="color:var(--coral); font-weight:600;">$95</td></tr>
+          <tr><td>11:20</td><td style="font-family:monospace;">GHI-3456</td><td>Fire Hydrant</td><td style="color:var(--coral); font-weight:600;">$200</td></tr>
+          <tr><td>12:45</td><td style="font-family:monospace;">JKL-7890</td><td>Blocking Driveway</td><td style="color:var(--coral); font-weight:600;">$150</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Hourly Activity</h3>
+      <div class="bar-chart" style="height:140px;">
+        <div class="bar-col"><div class="bar" style="height:20%; background:var(--blue);"></div><div class="bar-label">8am</div></div>
+        <div class="bar-col"><div class="bar" style="height:40%; background:var(--blue);"></div><div class="bar-label">9am</div></div>
+        <div class="bar-col"><div class="bar" style="height:60%; background:var(--blue);"></div><div class="bar-label">10am</div></div>
+        <div class="bar-col"><div class="bar" style="height:80%; background:var(--blue);"></div><div class="bar-label">11am</div></div>
+        <div class="bar-col"><div class="bar" style="height:100%; background:var(--blue);"></div><div class="bar-label">12pm</div></div>
+        <div class="bar-col"><div class="bar" style="height:0%; background:var(--blue); opacity:0.2;"></div><div class="bar-label">1pm</div></div>
+        <div class="bar-col"><div class="bar" style="height:0%; background:var(--blue); opacity:0.2;"></div><div class="bar-label">2pm</div></div>
+        <div class="bar-col"><div class="bar" style="height:0%; background:var(--blue); opacity:0.2;"></div><div class="bar-label">3pm</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ OFFICER: LOOKUP ════ -->
+<div class="page" id="o-lookup">
+  <div class="card">
+    <h3>Real-Time Permit Verification</h3>
+    <p style="font-size:12px; color:var(--faint); margin-bottom:14px;">Data syncs instantly. Try: ABC1234 (valid), JKL7890 (expired), NOPRMT (not found)</p>
+    <div style="display:flex; gap:12px;">
+      <input id="lookup-plate" style="flex:1; padding:14px 18px; border:1px solid #D0D0D0; border-radius:6px; font-size:16px; font-family:monospace;" placeholder="Enter license plate">
+      <button class="btn btn-blue" style="padding:14px 32px;" onclick="lookupPermit()">Verify</button>
+    </div>
+    <div id="lookup-result"></div>
+  </div>
+</div>
+
+<!-- ════ OFFICER: ISSUE ════ -->
+<div class="page" id="o-issue">
+  <div class="card" id="issue-form">
+    <h3>Issue New Citation</h3>
+    <div class="form-grid form-grid-2">
+      <div class="form-group"><label>License Plate</label><input id="issue-plate" style="font-family:monospace; font-size:16px;" placeholder="ABC-1234"></div>
+      <div class="form-group"><label>Zone</label><select><option>Zone A - Downtown</option><option>Zone B - University</option><option>Zone C - Residential</option><option>Zone D - Commercial</option><option>Zone E - Waterfront</option></select></div>
+    </div>
+    <div class="form-group" style="margin-top:14px"><label>Violation Type</label>
+      <select id="issue-violation" onchange="document.getElementById('fine-display').textContent='$'+this.value">
+        <option value="95">No Parking - Street Cleaning ($95)</option><option value="65">Expired Meter ($65)</option><option value="115">Double Parking ($115)</option><option value="200">Fire Hydrant ($200)</option><option value="115">No Standing ($115)</option><option value="150">Blocking Driveway ($150)</option><option value="132">Wrong Zone ($132)</option><option value="250">Bus Lane Violation ($250)</option>
+      </select>
+    </div>
+    <div style="background:#F8F9FA; border-radius:6px; padding:12px 18px; margin:14px 0; display:flex; justify-content:space-between;">
+      <span style="font-size:13px; color:var(--muted);">Fine Amount</span>
+      <span id="fine-display" style="font-size:22px; font-weight:700; color:var(--coral);">$95</span>
+    </div>
+    <div class="form-group"><label>Notes (optional)</label><textarea placeholder="Additional details..."></textarea></div>
+    <div style="display:flex; gap:12px; margin-top:16px;">
+      <button class="btn btn-coral" onclick="issueCitation()">Issue Citation</button>
+      <button class="btn btn-ghost" onclick="showPage('o-lookup')">Cancel</button>
+    </div>
+  </div>
+  <div id="issue-success" style="display:none"></div>
+</div>
+
+<!-- ════ OFFICER: SHIFT ════ -->
+<div class="page" id="o-shift">
+  <div class="card">
+    <h3>Activity Log</h3>
+    <table>
+      <thead><tr><th>Time</th><th>Action</th><th>Plate</th><th>Details</th><th>Result</th></tr></thead>
+      <tbody id="shift-body">
+        <tr><td>12:45 PM</td><td>Citation</td><td style="font-family:monospace;">JKL-7890</td><td>Blocking Driveway</td><td><span class="badge badge-red">$150</span></td></tr>
+        <tr><td>12:30 PM</td><td>Verification</td><td style="font-family:monospace;">QRS-4455</td><td>Permit check</td><td><span class="badge badge-green">Valid</span></td></tr>
+        <tr><td>11:20 AM</td><td>Citation</td><td style="font-family:monospace;">GHI-3456</td><td>Fire Hydrant</td><td><span class="badge badge-red">$200</span></td></tr>
+        <tr><td>11:05 AM</td><td>Verification</td><td style="font-family:monospace;">TUV-6677</td><td>Permit check</td><td><span class="badge badge-green">Valid</span></td></tr>
+        <tr><td>10:45 AM</td><td>Verification</td><td style="font-family:monospace;">WXY-8899</td><td>Permit check</td><td><span class="badge badge-green">Valid</span></td></tr>
+        <tr><td>10:05 AM</td><td>Citation</td><td style="font-family:monospace;">DEF-9012</td><td>Street Cleaning</td><td><span class="badge badge-red">$95</span></td></tr>
+        <tr><td>09:32 AM</td><td>Citation</td><td style="font-family:monospace;">XYZ-5678</td><td>Double Parking</td><td><span class="badge badge-red">$115</span></td></tr>
+        <tr><td>09:15 AM</td><td>Verification</td><td style="font-family:monospace;">MNO-1122</td><td>Permit check</td><td><span class="badge badge-green">Valid</span></td></tr>
+        <tr><td>08:15 AM</td><td>Citation</td><td style="font-family:monospace;">ABC-1234</td><td>Expired Meter</td><td><span class="badge badge-red">$65</span></td></tr>
+        <tr><td>08:00 AM</td><td>Shift Start</td><td></td><td>Zone A assigned</td><td><span class="badge badge-blue">Active</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ OFFICER: ZONES ════ -->
+<div class="page" id="o-zones">
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;" id="zone-grid"></div>
+</div>
+
+<!-- ════ ADMIN: HOME ════ -->
+<div class="page" id="a-home">
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Revenue Today</div><div class="stat-value" style="color:var(--teal);">$4,850</div><div class="stat-sub">22 payments processed</div><div class="mini-chart"><div class="mini-bar" style="height:40%;"></div><div class="mini-bar" style="height:55%;"></div><div class="mini-bar" style="height:70%;"></div><div class="mini-bar" style="height:65%;"></div><div class="mini-bar" style="height:80%;"></div><div class="mini-bar" style="height:100%;"></div><div class="mini-bar" style="height:90%;"></div></div></div>
+    <div class="stat-card"><div class="stat-label">Citations Today</div><div class="stat-value" style="color:var(--blue);">38</div><div class="stat-sub">Across 5 zones</div><div class="stat-bar"><div class="stat-bar-fill" style="width:76%; background:var(--blue);"></div></div></div>
+    <div class="stat-card"><div class="stat-label">Permits Pending</div><div class="stat-value" style="color:var(--gold);">8</div><div class="stat-sub">Avg processing: 38 min</div><div class="stat-bar"><div class="stat-bar-fill" style="width:32%; background:var(--gold);"></div></div></div>
+    <div class="stat-card"><div class="stat-label">Collection Rate</div><div class="stat-value" style="color:var(--teal);">87%</div><div class="stat-sub">Up from 58% (old system)</div><div class="stat-bar"><div class="stat-bar-fill" style="width:87%; background:var(--teal);"></div></div></div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+    <div class="card">
+      <h3>Revenue by Zone (Today)</h3>
+      <div class="bar-chart" style="height:140px;">
+        <div class="bar-col"><div class="bar" style="height:90%; background:var(--teal);"></div><div class="bar-label">Zone A</div></div>
+        <div class="bar-col"><div class="bar" style="height:65%; background:var(--teal);"></div><div class="bar-label">Zone B</div></div>
+        <div class="bar-col"><div class="bar" style="height:40%; background:var(--teal);"></div><div class="bar-label">Zone C</div></div>
+        <div class="bar-col"><div class="bar" style="height:70%; background:var(--teal);"></div><div class="bar-label">Zone D</div></div>
+        <div class="bar-col"><div class="bar" style="height:25%; background:var(--teal);"></div><div class="bar-label">Zone E</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>System Status</h3>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--teal);"></div><div><div class="activity-text">All 5 zones online</div><div class="activity-time">Real-time sync active</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--teal);"></div><div><div class="activity-text">13 officers on patrol</div><div class="activity-time">0 wrongful citation alerts</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--teal);"></div><div><div class="activity-text">Citizen portal: 47 active sessions</div><div class="activity-time">3 permit applications in queue</div></div></div>
+      <div class="activity-item"><div class="activity-dot" style="background:var(--gold);"></div><div><div class="activity-text">3 disputes under review</div><div class="activity-time">Avg response: 3.2 days</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ADMIN: QUEUE ════ -->
+<div class="page" id="a-queue">
+  <div class="card">
+    <h3>Pending Permit Applications</h3>
+    <table>
+      <thead><tr><th>ID</th><th>Applicant</th><th>Type</th><th>Zone</th><th>Submitted</th><th>Action</th></tr></thead>
+      <tbody id="queue-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ ADMIN: REVENUE ════ -->
+<div class="page" id="a-revenue">
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Today</div><div class="stat-value" style="color:var(--teal);">$4,850</div></div>
+    <div class="stat-card"><div class="stat-label">This Week</div><div class="stat-value" style="color:var(--teal);">$18,400</div></div>
+    <div class="stat-card"><div class="stat-label">This Month</div><div class="stat-value" style="color:var(--teal);">$72,300</div></div>
+    <div class="stat-card"><div class="stat-label">Outstanding</div><div class="stat-value" style="color:var(--coral);">$9,800</div></div>
+  </div>
+  <div class="card">
+    <h3>Recent Payments</h3>
+    <table>
+      <thead><tr><th>Time</th><th>Citation</th><th>Citizen</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1:32 PM</td><td style="font-family:monospace;">CIT-089445</td><td>J. Martinez</td><td style="font-weight:600; color:var(--teal);">$115</td><td>Online - Visa</td><td><span class="badge badge-green">Processed</span></td></tr>
+        <tr><td>12:58 PM</td><td style="font-family:monospace;">CIT-089401</td><td>S. Kim</td><td style="font-weight:600; color:var(--teal);">$200</td><td>Online - Mastercard</td><td><span class="badge badge-green">Processed</span></td></tr>
+        <tr><td>11:45 AM</td><td style="font-family:monospace;">CIT-089388</td><td>M. Chen</td><td style="font-weight:600; color:var(--teal);">$65</td><td>Online - Visa</td><td><span class="badge badge-green">Processed</span></td></tr>
+        <tr><td>11:20 AM</td><td style="font-family:monospace;">CIT-089376</td><td>R. Wilson</td><td style="font-weight:600; color:var(--teal);">$95</td><td>Kiosk - Cash</td><td><span class="badge badge-green">Processed</span></td></tr>
+        <tr><td>10:05 AM</td><td style="font-family:monospace;">CIT-089350</td><td>L. Davis</td><td style="font-weight:600; color:var(--gold);">$150</td><td>Online - Amex</td><td><span class="badge badge-yellow">Pending</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ ADMIN: OFFICERS ════ -->
+<div class="page" id="a-officers">
+  <div class="card">
+    <h3>Officer Activity</h3>
+    <table>
+      <thead><tr><th>Officer</th><th>Badge</th><th>Zone</th><th>Citations</th><th>Fines</th><th>Verified</th><th>Wrongful</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>M. Rivera</strong></td><td style="font-family:monospace;">#4872</td><td>Zone A</td><td>5</td><td style="font-weight:600;">$625</td><td>12</td><td style="color:var(--teal); font-weight:600;">0</td><td><span class="badge badge-green">On Patrol</span></td></tr>
+        <tr><td><strong>L. Chen</strong></td><td style="font-family:monospace;">#3201</td><td>Zone B</td><td>7</td><td style="font-weight:600;">$855</td><td>18</td><td style="color:var(--teal); font-weight:600;">0</td><td><span class="badge badge-green">On Patrol</span></td></tr>
+        <tr><td><strong>K. Williams</strong></td><td style="font-family:monospace;">#5544</td><td>Zone A</td><td>4</td><td style="font-weight:600;">$460</td><td>9</td><td style="color:var(--teal); font-weight:600;">0</td><td><span class="badge badge-green">On Patrol</span></td></tr>
+        <tr><td><strong>R. Patel</strong></td><td style="font-family:monospace;">#2987</td><td>Zone D</td><td>6</td><td style="font-weight:600;">$730</td><td>14</td><td style="color:var(--teal); font-weight:600;">0</td><td><span class="badge badge-yellow">Break</span></td></tr>
+        <tr><td><strong>T. Johnson</strong></td><td style="font-family:monospace;">#4100</td><td>Zone C</td><td>3</td><td style="font-weight:600;">$345</td><td>7</td><td style="color:var(--teal); font-weight:600;">0</td><td><span class="badge badge-green">On Patrol</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- content -->
+</div><!-- main -->
+
+<script>
+function enterApp(role) {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('sidebar').classList.add('visible');
+  document.querySelector('.main').classList.add('visible');
+  switchRole(role);
+}
+
+const vehicles = [
+  {plate:"ABC1234",make:"Toyota Camry",zone:"Zone A",type:"Residential",expiry:"2026-12-31",valid:true},
+  {plate:"XYZ5678",make:"Honda Civic",zone:"Zone B",type:"University",expiry:"2026-08-15",valid:true},
+  {plate:"DEF9012",make:"Ford F-150",zone:"Zone C",type:"Commercial",expiry:"2026-11-30",valid:true},
+  {plate:"GHI3456",make:"Chevrolet Malibu",zone:"Zone A",type:"Visitor",expiry:"2026-05-01",valid:true},
+  {plate:"JKL7890",make:"Nissan Altima",zone:"Zone D",type:"Contractor",expiry:"2025-12-31",valid:false},
+  {plate:"MNO1122",make:"BMW 3 Series",zone:"Zone E",type:"Residential",expiry:"2026-10-15",valid:true},
+  {plate:"NOPRMT",make:"Unknown Vehicle",zone:"",type:"",expiry:"",valid:false},
+];
+
+const permits = [
+  {id:"PRM-892301",name:"Sarah Johnson",type:"Residential",zone:"Zone A",time:"10 min ago"},
+  {id:"PRM-892302",name:"Mike Chen",type:"University",zone:"Zone B",time:"18 min ago"},
+  {id:"PRM-892303",name:"Lisa Rodriguez",type:"Commercial",zone:"Zone D",time:"25 min ago"},
+  {id:"PRM-892304",name:"James Wilson",type:"Visitor",zone:"Zone C",time:"31 min ago"},
+  {id:"PRM-892305",name:"Emily Davis",type:"Contractor",zone:"Zone A",time:"38 min ago"},
+  {id:"PRM-892306",name:"Robert Kim",type:"Residential",zone:"Zone E",time:"42 min ago"},
+  {id:"PRM-892307",name:"Amanda Brown",type:"University",zone:"Zone B",time:"45 min ago"},
+  {id:"PRM-892308",name:"David Martinez",type:"Commercial",zone:"Zone D",time:"48 min ago"},
+];
+
+const zones = [
+  {zone:"Zone A - Downtown",officers:4,citations:48,occupancy:"92%",status:"High Demand",color:"var(--coral)"},
+  {zone:"Zone B - University",officers:3,citations:35,occupancy:"78%",status:"Moderate",color:"var(--gold)"},
+  {zone:"Zone C - Residential",officers:2,citations:22,occupancy:"61%",status:"Normal",color:"var(--teal)"},
+  {zone:"Zone D - Commercial",officers:3,citations:31,occupancy:"85%",status:"High Demand",color:"var(--coral)"},
+  {zone:"Zone E - Waterfront",officers:1,citations:12,occupancy:"45%",status:"Low",color:"var(--teal)"},
+];
+
+const profiles = {
+  citizen: {initials:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" style="width:16px;height:16px;"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>', name:"Sowjanya Kavuri", plate:"Plate: RVT-2847"},
+  officer: {initials:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" style="width:16px;height:16px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', name:"Officer Rivera", plate:"Badge #4872 | Zone A"},
+  admin: {initials:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" style="width:16px;height:16px;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>', name:"Admin Cardona", plate:"City Administrator"},
+};
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.target.closest('.nav-item')?.classList.add('active');
+  const titles = {
+    'c-home':'Dashboard','c-find':'Find Parking','c-reserve':'Reserve a Spot','c-permits':'My Permits',
+    'c-apply':'Apply for Permit','c-citations':'My Citations','c-pay':'Pay a Fine','c-receipts':'My Receipts',
+    'c-dispute':'File a Dispute','c-account':'My Account','c-help':'Help & Support',
+    'o-home':'Shift Dashboard','o-lookup':'Permit Lookup','o-issue':'Issue Citation','o-shift':'Activity Log','o-zones':'Zone Status',
+    'a-home':'City Overview','a-queue':'Permit Queue','a-revenue':'Revenue','a-officers':'Officer Activity'
+  };
+  document.getElementById('page-title').textContent = titles[id] || 'Dashboard';
+}
+
+function switchRole(role) {
+  document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.role-chip').forEach(c => { if(c.textContent.trim().toLowerCase().includes(role)) c.classList.add('active'); });
+  ['citizen','officer','admin'].forEach(r => {
+    document.getElementById('nav-'+r).style.display = r===role?'block':'none';
+  });
+  const p = profiles[role];
+  document.querySelector('.user-avatar').innerHTML = p.initials;
+  document.querySelector('.uname').textContent = p.name;
+  document.querySelector('.uplate').textContent = p.plate;
+  const firstPage = {citizen:'c-home', officer:'o-home', admin:'a-home'};
+  document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
+  document.getElementById(firstPage[role]).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector('#nav-'+role+' .nav-item').classList.add('active');
+  const bc = {citizen:'Citizen Portal', officer:'Officer App', admin:'Admin Panel'};
+  document.getElementById('page-breadcrumb').textContent = bc[role] + ' / Overview';
+  document.getElementById('page-title').textContent = 'Dashboard';
+}
+
+function submitApp() {
+  const fn=document.getElementById('fn').value, ln=document.getElementById('ln').value, em=document.getElementById('em').value, vp=document.getElementById('vplate').value;
+  if(!fn||!ln||!em||!vp){alert('Please fill required fields: Name, Email, Plate.');return;}
+  const id='PRM-'+Date.now().toString().slice(-6);
+  document.getElementById('apply-form').style.display='none';
+  document.getElementById('apply-success').style.display='block';
+  document.getElementById('apply-success').innerHTML='<div class="card"><div class="success"><div class="s-icon" style="background:#E6F9F1;color:var(--teal);">OK</div><h3>Application Submitted</h3><p>Permit ID: <strong style="font-family:monospace;color:var(--blue);font-size:18px;">'+id+'</strong></p><div class="info-row" style="max-width:400px;margin:16px auto;grid-template-columns:1fr 1fr 1fr;"><div class="info-card"><div class="lbl">Est. Processing</div><div class="val" style="color:var(--teal);">~1.25 hrs</div></div><div class="info-card"><div class="lbl">Status</div><div class="val" style="color:var(--gold);">Review</div></div><div class="info-card"><div class="lbl">Old System</div><div class="val" style="color:var(--coral);">8 days</div></div></div><p style="font-size:12px;">Confirmation sent to '+em+'</p><button class="btn btn-ghost" style="margin-top:12px;" onclick="document.getElementById(\'apply-form\').style.display=\'block\';document.getElementById(\'apply-success\').style.display=\'none\';">New Application</button></div></div>';
+}
+
+function processPayment() {
+  document.getElementById('pay-form').style.display='none';
+  document.getElementById('pay-success').style.display='block';
+  document.getElementById('pay-success').innerHTML='<div class="card"><div class="success"><div class="s-icon" style="background:#E6F9F1;color:var(--teal);">OK</div><h3>Payment Successful</h3><p>Your fine has been paid. Receipt sent to your email.</p><p style="color:var(--teal);font-weight:600;margin-top:8px;">Payment reflected in the system in real-time.</p><button class="btn btn-ghost" style="margin-top:16px;" onclick="document.getElementById(\'pay-form\').style.display=\'block\';document.getElementById(\'pay-success\').style.display=\'none\';">Pay Another</button></div></div>';
+}
+
+function updatePayAmount() {
+  document.getElementById('pay-amount').textContent = '$'+document.getElementById('pay-select').value;
+}
+
+function submitDispute() {
+  document.getElementById('dispute-form').style.display='none';
+  document.getElementById('dispute-success').style.display='block';
+  document.getElementById('dispute-success').innerHTML='<div class="card"><div class="success"><div class="s-icon" style="background:#FFF8E6;color:var(--gold);">!</div><h3>Dispute Filed</h3><p>Your dispute has been submitted and is under review.</p><div class="info-row" style="max-width:400px;margin:16px auto;grid-template-columns:1fr 1fr 1fr;"><div class="info-card"><div class="lbl">Status</div><div class="val" style="color:var(--gold);">Review</div></div><div class="info-card"><div class="lbl">Response</div><div class="val" style="color:var(--teal);">< 4 hrs</div></div><div class="info-card"><div class="lbl">Old System</div><div class="val" style="color:var(--coral);">58 hrs</div></div></div><button class="btn btn-ghost" style="margin-top:12px;" onclick="document.getElementById(\'dispute-form\').style.display=\'block\';document.getElementById(\'dispute-success\').style.display=\'none\';">File Another</button></div></div>';
+}
+
+function lookupPermit() {
+  const input=document.getElementById('lookup-plate').value.trim().toUpperCase();
+  if(!input){alert('Please enter a plate number.');return;}
+  const el=document.getElementById('lookup-result');
+  const found=vehicles.find(v=>v.plate.toUpperCase().includes(input));
+  if(found&&found.valid) {
+    el.innerHTML='<div class="result-card result-valid"><div class="result-header"><div class="icon">OK</div><div><h4>VALID PERMIT</h4><p>Active permit found. Do NOT issue citation.</p></div></div><div class="result-body"><div class="info-row"><div class="info-card"><div class="lbl">Plate</div><div class="val" style="font-family:monospace;">'+found.plate+'</div></div><div class="info-card"><div class="lbl">Vehicle</div><div class="val">'+found.make+'</div></div><div class="info-card"><div class="lbl">Zone</div><div class="val">'+found.zone+'</div></div><div class="info-card"><div class="lbl">Valid Until</div><div class="val" style="color:var(--teal);">'+found.expiry+'</div></div></div><p style="font-size:11px;color:var(--faint);margin-top:8px;">Synced: '+new Date().toLocaleTimeString()+' (real-time)</p></div></div>';
+  } else if(found&&!found.valid) {
+    el.innerHTML='<div class="result-card result-warn"><div class="result-header"><div class="icon">!</div><div><h4>EXPIRED / NO ACTIVE PERMIT</h4><p>You may issue a citation.</p></div></div><div class="result-body"><div class="info-row" style="grid-template-columns:1fr 1fr 1fr;"><div class="info-card"><div class="lbl">Plate</div><div class="val" style="font-family:monospace;">'+found.plate+'</div></div><div class="info-card"><div class="lbl">Vehicle</div><div class="val">'+found.make+'</div></div><div class="info-card"><div class="lbl">Expired</div><div class="val" style="color:var(--coral);">'+found.expiry+'</div></div></div><button class="btn btn-coral" style="margin-top:12px;" onclick="document.getElementById(\'issue-plate\').value=\''+found.plate+'\';showPage(\'o-issue\');">Issue Citation</button></div></div>';
+  } else {
+    el.innerHTML='<div class="result-card result-none"><div class="result-header"><div class="icon">X</div><div><h4>NO PERMIT ON RECORD</h4><p>No permit found for "'+input+'".</p></div></div><div class="result-body"><button class="btn btn-coral" onclick="document.getElementById(\'issue-plate\').value=\''+input+'\';showPage(\'o-issue\');">Issue Citation</button></div></div>';
+  }
+}
+
+function issueCitation() {
+  const plate=document.getElementById('issue-plate').value.trim();
+  if(!plate){alert('Enter a plate number.');return;}
+  const id='CIT-'+Date.now().toString().slice(-6);
+  const fine=document.getElementById('issue-violation').value;
+  document.getElementById('issue-form').style.display='none';
+  document.getElementById('issue-success').style.display='block';
+  document.getElementById('issue-success').innerHTML='<div class="card"><div class="success"><div class="s-icon" style="background:#FFF0F0;color:var(--coral);">!</div><h3>Citation Issued</h3><p>'+id+' recorded for '+plate+'</p><div class="info-row" style="max-width:500px;margin:16px auto;"><div class="info-card"><div class="lbl">Citation</div><div class="val" style="font-family:monospace;font-size:12px;">'+id+'</div></div><div class="info-card"><div class="lbl">Plate</div><div class="val" style="font-size:12px;">'+plate+'</div></div><div class="info-card"><div class="lbl">Fine</div><div class="val" style="color:var(--coral);">$'+fine+'</div></div><div class="info-card" style="background:#E6F9F1;"><div class="lbl">Sync</div><div class="val" style="color:var(--teal);">Real-time</div></div></div><p style="font-size:12px;">Synced to finance, citizen portal, and all devices.</p><button class="btn btn-ghost" style="margin-top:12px;" onclick="document.getElementById(\'issue-form\').style.display=\'block\';document.getElementById(\'issue-success\').style.display=\'none\';document.getElementById(\'issue-plate\').value=\'\';">Issue Another</button></div></div>';
+}
+
+// Init
+document.getElementById('zone-grid').innerHTML = zones.map(z=>'<div class="stat-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><h4 style="font-size:13px;font-weight:600;margin:0;">'+z.zone+'</h4><span class="badge" style="background:'+(z.color==='var(--coral)'?'#FFF0F0':z.color==='var(--gold)'?'#FFF8E6':'#E6F9F1')+';color:'+z.color+';">'+z.status+'</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;"><div><div style="font-size:10px;color:var(--faint);">Officers</div><div style="font-size:18px;font-weight:600;">'+z.officers+'</div></div><div><div style="font-size:10px;color:var(--faint);">Citations</div><div style="font-size:18px;font-weight:600;">'+z.citations+'</div></div><div><div style="font-size:10px;color:var(--faint);">Occupancy</div><div style="font-size:18px;font-weight:600;color:'+z.color+';">'+z.occupancy+'</div></div></div></div>').join('');
+
+document.getElementById('queue-body').innerHTML = permits.map(p=>'<tr><td style="font-family:monospace;">'+p.id+'</td><td><strong>'+p.name+'</strong></td><td>'+p.type+'</td><td>'+p.zone+'</td><td style="color:var(--faint);">'+p.time+'</td><td><button class="btn btn-teal btn-sm" onclick="this.textContent=\'Approved\';this.className=\'badge badge-green\';this.onclick=null;">Approve</button> <button class="btn btn-ghost btn-sm" onclick="this.textContent=\'Rejected\';this.className=\'badge badge-red\';this.onclick=null;">Reject</button></td></tr>').join('');
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════
+// localStorage PERSISTENCE LAYER
+// All user actions persist across page refreshes
+// ═══════════════════════════════════════════════════
+
+var LS={
+  get:function(k){try{return JSON.parse(localStorage.getItem('rvt_'+k));}catch(e){return null;}},
+  set:function(k,v){localStorage.setItem('rvt_'+k,JSON.stringify(v));}
+};
+
+function initStorage(){
+  if(LS.get('init'))return;
+  LS.set('citations',[
+    {id:"CIT-00489",date:"Apr 22, 2026",violation:"Double Parking",zone:"Zone A",fine:115,status:"unpaid"},
+    {id:"CIT-00456",date:"Apr 10, 2026",violation:"Expired Meter",zone:"Zone B",fine:65,status:"unpaid"},
+    {id:"CIT-00431",date:"Mar 28, 2026",violation:"No Parking - Street Cleaning",zone:"Zone A",fine:130,status:"unpaid"},
+    {id:"CIT-00412",date:"Mar 15, 2026",violation:"Overtime Parking",zone:"Zone D",fine:65,status:"paid"},
+    {id:"CIT-00388",date:"Feb 28, 2026",violation:"Wrong Zone",zone:"Zone C",fine:132,status:"disputed"},
+    {id:"CIT-00350",date:"Feb 10, 2026",violation:"Fire Hydrant",zone:"Zone A",fine:200,status:"paid"},
+    {id:"CIT-00321",date:"Jan 20, 2026",violation:"Blocking Driveway",zone:"Zone B",fine:150,status:"paid"},
+    {id:"CIT-00298",date:"Jan 05, 2026",violation:"No Standing",zone:"Zone A",fine:115,status:"paid"}
+  ]);
+  LS.set('permits',[
+    {id:"PRM-284701",zone:"Zone A - Downtown",type:"Residential",vehicle:"RVT-2847",issued:"Jan 12, 2026",expires:"Jun 12, 2026",status:"active"},
+    {id:"PRM-284623",zone:"Zone B - University",type:"University",vehicle:"RVT-2847",issued:"Feb 01, 2026",expires:"Dec 31, 2026",status:"active"},
+    {id:"PRM-271450",zone:"Zone A - Downtown",type:"Residential",vehicle:"RVT-2847",issued:"Jan 15, 2025",expires:"Jan 14, 2026",status:"expired"}
+  ]);
+  LS.set('receipts',[
+    {id:"RCP-78901",date:"Mar 16, 2026",citation:"CIT-00412",amount:65,method:"Visa ending 4242"},
+    {id:"RCP-78845",date:"Feb 11, 2026",citation:"CIT-00350",amount:200,method:"Visa ending 4242"},
+    {id:"RCP-78790",date:"Jan 22, 2026",citation:"CIT-00321",amount:150,method:"Mastercard ending 8899"},
+    {id:"RCP-78742",date:"Jan 06, 2026",citation:"CIT-00298",amount:115,method:"Visa ending 4242"}
+  ]);
+  LS.set('queue',[
+    {id:"PRM-892301",name:"Sarah Johnson",type:"Residential",zone:"Zone A",time:"10 min ago",status:"pending"},
+    {id:"PRM-892302",name:"Mike Chen",type:"University",zone:"Zone B",time:"18 min ago",status:"pending"},
+    {id:"PRM-892303",name:"Lisa Rodriguez",type:"Commercial",zone:"Zone D",time:"25 min ago",status:"pending"},
+    {id:"PRM-892304",name:"James Wilson",type:"Visitor",zone:"Zone C",time:"31 min ago",status:"pending"},
+    {id:"PRM-892305",name:"Emily Davis",type:"Contractor",zone:"Zone A",time:"38 min ago",status:"pending"},
+    {id:"PRM-892306",name:"Robert Kim",type:"Residential",zone:"Zone E",time:"42 min ago",status:"pending"},
+    {id:"PRM-892307",name:"Amanda Brown",type:"University",zone:"Zone B",time:"45 min ago",status:"pending"},
+    {id:"PRM-892308",name:"David Martinez",type:"Commercial",zone:"Zone D",time:"48 min ago",status:"pending"}
+  ]);
+  LS.set('activity',[
+    {time:"12:45 PM",action:"Citation",plate:"JKL-7890",details:"Blocking Driveway",result:"$150",type:"citation"},
+    {time:"12:30 PM",action:"Verification",plate:"QRS-4455",details:"Permit check",result:"Valid",type:"valid"},
+    {time:"11:20 AM",action:"Citation",plate:"GHI-3456",details:"Fire Hydrant",result:"$200",type:"citation"},
+    {time:"11:05 AM",action:"Verification",plate:"TUV-6677",details:"Permit check",result:"Valid",type:"valid"},
+    {time:"10:45 AM",action:"Verification",plate:"WXY-8899",details:"Permit check",result:"Valid",type:"valid"},
+    {time:"10:05 AM",action:"Citation",plate:"DEF-9012",details:"Street Cleaning",result:"$95",type:"citation"},
+    {time:"09:32 AM",action:"Citation",plate:"XYZ-5678",details:"Double Parking",result:"$115",type:"citation"},
+    {time:"09:15 AM",action:"Verification",plate:"MNO-1122",details:"Permit check",result:"Valid",type:"valid"},
+    {time:"08:15 AM",action:"Citation",plate:"ABC-1234",details:"Expired Meter",result:"$65",type:"citation"},
+    {time:"08:00 AM",action:"Shift Start",plate:"--",details:"Zone A assigned",result:"Active",type:"info"}
+  ]);
+  LS.set('reservations',[]);
+  LS.set('init',true);
+}
+
+// ═══ RENDER FUNCTIONS ═══
+
+function renderCitations(){
+  var data=LS.get('citations')||[];
+  var tbody=document.getElementById('citations-body');
+  if(!tbody)return;
+  var unpaid=data.filter(function(c){return c.status==='unpaid';});
+  var paid=data.filter(function(c){return c.status==='paid';});
+  var disputed=data.filter(function(c){return c.status==='disputed';});
+  var stats=document.getElementById('c-citations');
+  if(stats){
+    var cards=stats.querySelectorAll('.stat-card');
+    if(cards[0]){cards[0].querySelector('.stat-value').textContent=unpaid.length;cards[0].querySelector('.stat-sub').textContent='$'+unpaid.reduce(function(s,c){return s+c.fine;},0)+' outstanding';}
+    if(cards[1]){cards[1].querySelector('.stat-value').textContent=paid.length;cards[1].querySelector('.stat-sub').textContent='$'+paid.reduce(function(s,c){return s+c.fine;},0)+' total paid';}
+    if(cards[2]){cards[2].querySelector('.stat-value').textContent=disputed.length;}
+  }
+  tbody.innerHTML=data.map(function(c){
+    var bc=c.status==='paid'?'badge-green':c.status==='disputed'?'badge-yellow':'badge-red';
+    var lb=c.status.charAt(0).toUpperCase()+c.status.slice(1);
+    var act=c.status==='unpaid'?'<button class="btn btn-teal btn-sm" onclick="showPage(\'c-pay\')">Pay</button>':'';
+    return '<tr><td style="font-family:monospace;">'+c.id+'</td><td>'+c.date+'</td><td>'+c.violation+'</td><td>'+c.zone+'</td><td style="font-weight:600;">$'+c.fine+'</td><td><span class="badge '+bc+'">'+lb+'</span></td><td>'+act+'</td></tr>';
+  }).join('');
+  renderPaySelect();
+  renderDisputeSelect();
+}
+
+function renderPaySelect(){
+  var data=(LS.get('citations')||[]).filter(function(c){return c.status==='unpaid';});
+  var sel=document.getElementById('pay-select');
+  if(!sel)return;
+  if(data.length===0){sel.innerHTML='<option value="0">No unpaid citations</option>';updatePayAmount();return;}
+  sel.innerHTML=data.map(function(c){return '<option value="'+c.fine+'" data-id="'+c.id+'">'+c.id+' - '+c.violation+' - $'+c.fine+'</option>';}).join('');
+  updatePayAmount();
+}
+
+function renderDisputeSelect(){
+  var data=(LS.get('citations')||[]).filter(function(c){return c.status==='unpaid';});
+  var sels=document.querySelectorAll('#dispute-form select');
+  var sel=sels[0];
+  if(!sel)return;
+  if(data.length===0){sel.innerHTML='<option>No citations to dispute</option>';return;}
+  sel.innerHTML=data.map(function(c){return '<option>'+c.id+' - '+c.violation+' ($'+c.fine+')</option>';}).join('');
+}
+
+function renderReceipts(){
+  var data=LS.get('receipts')||[];
+  var tbody=document.getElementById('receipts-body');
+  if(!tbody)return;
+  tbody.innerHTML=data.map(function(r){
+    return '<tr><td style="font-family:monospace;">'+r.id+'</td><td>'+r.date+'</td><td style="font-family:monospace;">'+r.citation+'</td><td style="font-weight:600;color:var(--teal);">$'+r.amount+'</td><td>'+r.method+'</td><td><span class="badge badge-green">Confirmed</span></td></tr>';
+  }).join('');
+}
+
+function renderPermits(){
+  var data=LS.get('permits')||[];
+  var tbody=document.getElementById('permits-body');
+  if(!tbody)return;
+  tbody.innerHTML=data.map(function(p){
+    var sc=p.status==='active'?'badge-green':p.status==='expired'?'badge-red':'badge-yellow';
+    var sl=p.status.charAt(0).toUpperCase()+p.status.slice(1);
+    var ec=p.status==='expired'?'color:var(--coral);':'';
+    return '<tr><td style="font-family:monospace;font-weight:600;">'+p.id+'</td><td>'+p.zone+'</td><td>'+p.type+'</td><td style="font-family:monospace;">'+p.vehicle+'</td><td>'+p.issued+'</td><td style="'+ec+'">'+p.expires+'</td><td><span class="badge '+sc+'">'+sl+'</span></td></tr>';
+  }).join('');
+}
+
+function renderQueue(){
+  var data=LS.get('queue')||[];
+  var tbody=document.getElementById('queue-body');
+  if(!tbody)return;
+  var pending=data.filter(function(q){return q.status==='pending';}).length;
+  tbody.innerHTML=data.map(function(p){
+    if(p.status==='approved')return '<tr><td style="font-family:monospace;">'+p.id+'</td><td><strong>'+p.name+'</strong></td><td>'+p.type+'</td><td>'+p.zone+'</td><td style="color:var(--faint);">'+p.time+'</td><td><span class="badge badge-green">Approved</span></td></tr>';
+    if(p.status==='rejected')return '<tr><td style="font-family:monospace;">'+p.id+'</td><td><strong>'+p.name+'</strong></td><td>'+p.type+'</td><td>'+p.zone+'</td><td style="color:var(--faint);">'+p.time+'</td><td><span class="badge badge-red">Rejected</span></td></tr>';
+    return '<tr><td style="font-family:monospace;">'+p.id+'</td><td><strong>'+p.name+'</strong></td><td>'+p.type+'</td><td>'+p.zone+'</td><td style="color:var(--faint);">'+p.time+'</td><td><button class="btn btn-teal btn-sm" onclick="approvePermit(\''+p.id+'\')">Approve</button> <button class="btn btn-ghost btn-sm" onclick="rejectPermit(\''+p.id+'\')">Reject</button></td></tr>';
+  }).join('');
+  var badges=document.querySelectorAll('#nav-admin .nav-badge');
+  badges.forEach(function(b){b.textContent=pending;});
+}
+
+function renderActivity(){
+  var data=LS.get('activity')||[];
+  var tbody=document.getElementById('shift-body');
+  if(!tbody)return;
+  tbody.innerHTML=data.map(function(a){
+    var badge=a.type==='citation'?'badge-red':a.type==='valid'?'badge-green':'badge-blue';
+    return '<tr><td>'+a.time+'</td><td>'+a.action+'</td><td style="font-family:monospace;">'+a.plate+'</td><td>'+a.details+'</td><td><span class="badge '+badge+'">'+a.result+'</span></td></tr>';
+  }).join('');
+}
+
+function renderHomeStats(){
+  var permits=LS.get('permits')||[];
+  var citations=LS.get('citations')||[];
+  var receipts=LS.get('receipts')||[];
+  var active=permits.filter(function(p){return p.status==='active';}).length;
+  var unpaid=citations.filter(function(c){return c.status==='unpaid';});
+  var totalPaid=receipts.reduce(function(s,r){return s+r.amount;},0);
+  var home=document.getElementById('c-home');
+  if(!home)return;
+  var cards=home.querySelectorAll('.stat-card');
+  if(cards[0])cards[0].querySelector('.stat-value').textContent=active;
+  if(cards[1]){cards[1].querySelector('.stat-value').textContent=unpaid.length;cards[1].querySelector('.stat-sub').textContent='$'+unpaid.reduce(function(s,c){return s+c.fine;},0)+' total outstanding';}
+  if(cards[2])cards[2].querySelector('.stat-value').textContent='$'+totalPaid;
+  var badge=document.querySelector('#nav-citizen .nav-badge');
+  if(badge)badge.textContent=unpaid.length||'';
+}
+
+function renderAll(){
+  renderCitations();renderReceipts();renderPermits();renderQueue();renderActivity();renderHomeStats();
+}
+
+// ═══ ADMIN ACTIONS ═══
+
+function approvePermit(id){
+  var queue=LS.get('queue')||[];
+  var item=queue.find(function(q){return q.id===id;});
+  if(item)item.status='approved';
+  LS.set('queue',queue);
+  var permits=LS.get('permits')||[];
+  var perm=permits.find(function(p){return p.id===id;});
+  if(perm)perm.status='active';
+  LS.set('permits',permits);
+  renderQueue();
+}
+
+function rejectPermit(id){
+  var queue=LS.get('queue')||[];
+  var item=queue.find(function(q){return q.id===id;});
+  if(item)item.status='rejected';
+  LS.set('queue',queue);
+  var permits=LS.get('permits')||[];
+  var perm=permits.find(function(p){return p.id===id;});
+  if(perm)perm.status='rejected';
+  LS.set('permits',permits);
+  renderQueue();
+}
+
+// ═══ OVERRIDE FORM SUBMISSIONS (with localStorage) ═══
+
+function submitApp(){
+  var fn=document.getElementById('fn').value,ln=document.getElementById('ln').value,em=document.getElementById('em').value,vp=document.getElementById('vplate').value;
+  if(!fn||!ln||!em||!vp){alert('Please fill required fields: Name, Email, Plate.');return;}
+  var id='PRM-'+Date.now().toString().slice(-6);
+  var now=new Date();
+  var dateStr=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  var expiry=new Date(now);expiry.setFullYear(expiry.getFullYear()+1);
+  var expStr=expiry.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  var selects=document.querySelectorAll('#apply-form select');
+  var zone=selects[0]?selects[0].value:'Zone A - Downtown';
+  var type=selects[1]?selects[1].value:'Residential';
+  var permits=LS.get('permits')||[];
+  permits.unshift({id:id,zone:zone,type:type,vehicle:vp,issued:dateStr,expires:expStr,status:'pending'});
+  LS.set('permits',permits);
+  var queue=LS.get('queue')||[];
+  queue.unshift({id:id,name:fn+' '+ln,type:type,zone:zone.split(' - ')[0]||zone,time:'Just now',status:'pending'});
+  LS.set('queue',queue);
+  document.getElementById('apply-form').style.display='none';
+  document.getElementById('apply-success').style.display='block';
+  document.getElementById('apply-success').innerHTML='<div class="card"><div class="success"><div class="s-icon" style="background:#E6F9F1;color:var(--teal);">OK</div><h3>Application Submitted</h3><p>Permit ID: <strong style="font-family:monospace;color:var(--blue);font-size:18px;">'+id+'</strong></p><div class="info-row" style="max-width:400px;margin:16px auto;grid-template-columns:1fr 1fr 1fr;"><div class="info-card"><div class="lbl">Est. Processing</div><div class="val" style="color:var(--teal);">~1.25 hrs</div></div><div class="info-card"><div class="lbl">Status</div><div class="val" style="color:var(--gold);">Review</div></div><div class="info-card"><div class="lbl">Old System</div><div class="val" style="color:var(--coral);">8 days</div></div></div><p style="font-size:12px;">Confirmation sent to '+em+'</p><p style="font-size:11px;color:var(--teal);margin-top:6px;">Saved. View it in My Permits or Admin Queue.</p><button class="btn btn-ghost" style="margin-top:12px;" onclick="document.getElementById(\'apply-form\').style.display=\'block\';document.getElementById(\'apply-success\').style.display=\'none\';">New Application</button></div></div>';
+  renderAll();
+}
+
+function processPayment(){
+  var sel=document.getElementById('pay-select');
+  if(!sel||!sel.options.length||sel.value==='0'){alert('No unpaid citations to pay.');return;}
+  var opt=sel.options[sel.selectedIndex];
+  var citId=opt.getAttribute('data-id')||opt.text.split(' - ')[0];
+  var amount=parseInt(sel.value)||0;
+  var citations=LS.get('citations')||[];
+  var cit=citations.find(function(c){return c.id===citId;});
+  if(cit)cit.status='paid';
+  LS.set('citations',citations);
+  var receipts=LS.get('receipts')||[];
+  var now=new Date();
+  var dateStr=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  receipts.unshift({id:'RCP-'+Date.now().toString().slice(-5),date:dateStr,citation:citId,amount:amount,method:'Visa ending 4242'});
+  LS.set('receipts',receipts);
+  document.getElementById('pay-form').style.display='none';
+  document.getElementById('pay-success').style.display='block';
+  document.getElementById('pay-success').innerHTML='<div class="card"><div class="success"><div class="s-icon" style="background:#E6F9F1;color:var(--teal);">OK</div><h3>Payment Successful</h3><p>'+citId+' -- $'+amount+' paid successfully.</p><p style="color:var(--teal);font-weight:600;margin-top:8px;">Payment reflected in the system in real-time.</p><p style="font-size:11px;color:var(--teal);margin-top:4px;">Receipt saved. Check My Receipts.</p><button class="btn btn-ghost" style="margin-top:16px;" onclick="document.getElementById(\'pay-form\').style.display=\'block\';document.getElementById(\'pay-success\').style.display=\'none\';renderAll();">Pay Another</button></div></div>';
+  renderAll();
+}
+
+function submitDispute(){
+  var sels=document.querySelectorAll('#dispute-form select');
+  var sel=sels[0];
+  if(!sel||!sel.options.length)return;
+  var selectedText=sel.options[sel.selectedIndex].text;
+  var citId=selectedText.split(' - ')[0];
+  var citations=LS.get('citations')||[];
+  var cit=citations.find(function(c){return c.id===citId;});
+  if(cit)cit.status='disputed';
+  LS.set('citations',citations);
+  document.getElementById('dispute-form').style.display='none';
+  document.getElementById('dispute-success').style.display='block';
+  document.getElementById('dispute-success').innerHTML='<div class="card"><div class="success"><div class="s-icon" style="background:#FFF8E6;color:var(--gold);">!</div><h3>Dispute Filed</h3><p>'+citId+' dispute submitted and is under review.</p><div class="info-row" style="max-width:400px;margin:16px auto;grid-template-columns:1fr 1fr 1fr;"><div class="info-card"><div class="lbl">Status</div><div class="val" style="color:var(--gold);">Review</div></div><div class="info-card"><div class="lbl">Response</div><div class="val" style="color:var(--teal);">< 4 hrs</div></div><div class="info-card"><div class="lbl">Old System</div><div class="val" style="color:var(--coral);">58 hrs</div></div></div><p style="font-size:11px;color:var(--teal);margin-top:4px;">Saved. Check My Citations for updated status.</p><button class="btn btn-ghost" style="margin-top:12px;" onclick="document.getElementById(\'dispute-form\').style.display=\'block\';document.getElementById(\'dispute-success\').style.display=\'none\';renderAll();">File Another</button></div></div>';
+  renderAll();
+}
+
+function issueCitation(){
+  var plate=document.getElementById('issue-plate').value.trim();
+  if(!plate){alert('Enter a plate number.');return;}
+  var id='CIT-'+Date.now().toString().slice(-6);
+  var violSel=document.getElementById('issue-violation');
+  var fine=parseInt(violSel.value)||95;
+  var violText=violSel.options[violSel.selectedIndex].text;
+  var violation=violText.split(' ($')[0];
+  var zoneSel=document.querySelector('#issue-form select');
+  var zone=zoneSel?zoneSel.value.split(' - ')[0]||zoneSel.value:'Zone A';
+  var now=new Date();
+  var dateStr=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  var timeStr=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  var citations=LS.get('citations')||[];
+  citations.unshift({id:id,date:dateStr,violation:violation,zone:zone,fine:fine,status:'unpaid'});
+  LS.set('citations',citations);
+  var activity=LS.get('activity')||[];
+  activity.unshift({time:timeStr,action:"Citation",plate:plate,details:violation,result:"$"+fine,type:"citation"});
+  LS.set('activity',activity);
+  document.getElementById('issue-form').style.display='none';
+  document.getElementById('issue-success').style.display='block';
+  document.getElementById('issue-success').innerHTML='<div class="card"><div class="success"><div class="s-icon" style="background:#FFF0F0;color:var(--coral);">!</div><h3>Citation Issued</h3><p>'+id+' recorded for '+plate+'</p><div class="info-row" style="max-width:500px;margin:16px auto;"><div class="info-card"><div class="lbl">Citation</div><div class="val" style="font-family:monospace;font-size:12px;">'+id+'</div></div><div class="info-card"><div class="lbl">Plate</div><div class="val" style="font-size:12px;">'+plate+'</div></div><div class="info-card"><div class="lbl">Fine</div><div class="val" style="color:var(--coral);">$'+fine+'</div></div><div class="info-card" style="background:#E6F9F1;"><div class="lbl">Sync</div><div class="val" style="color:var(--teal);">Saved</div></div></div><p style="font-size:12px;">Synced to finance, citizen portal, and all devices.</p><button class="btn btn-ghost" style="margin-top:12px;" onclick="document.getElementById(\'issue-form\').style.display=\'block\';document.getElementById(\'issue-success\').style.display=\'none\';document.getElementById(\'issue-plate\').value=\'\';">Issue Another</button></div></div>';
+  renderAll();
+}
+
+function reserveSpot(){
+  var selects=document.querySelectorAll('#reserve-form select');
+  var zone=selects[0]?selects[0].value:'Zone A - Downtown';
+  var duration=selects[1]?selects[1].value:'2 hours';
+  var dateInput=document.querySelector('#reserve-form input[type=date]');
+  var timeInput=document.querySelector('#reserve-form input[type=time]');
+  var dateVal=dateInput?dateInput.value:'';
+  var timeVal=timeInput?timeInput.value:'09:00';
+  var now=new Date();
+  var resDate=dateVal?new Date(dateVal+'T'+timeVal):now;
+  var dateStr=resDate.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  var confId='RSV-'+Date.now().toString().slice(-6);
+  var reservations=LS.get('reservations')||[];
+  reservations.unshift({id:confId,zone:zone,date:dateStr,time:timeVal,duration:duration,created:now.toISOString()});
+  LS.set('reservations',reservations);
+  document.getElementById('reserve-form').innerHTML='<div class="success"><div class="s-icon" style="background:#E6F9F1;color:var(--teal);">OK</div><h3>Spot Reserved</h3><p>'+zone.split(' (')[0]+', '+dateStr+', '+timeVal+' - '+duration+'</p><p style="color:var(--teal);font-weight:600;margin-top:8px;">Confirmation: '+confId+'</p><p style="font-size:12px;margin-top:12px;">Reservation synced to enforcement devices. Officers will see your vehicle as authorized.</p><p style="font-size:11px;color:var(--teal);margin-top:4px;">Saved to your account.</p></div>';
+}
+
+// ═══ OVERRIDE showPage to re-render data on navigation ═══
+function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  if(window.event&&window.event.target)window.event.target.closest('.nav-item')?.classList.add('active');
+  var titles={
+    'c-home':'Dashboard','c-find':'Find Parking','c-reserve':'Reserve a Spot','c-permits':'My Permits',
+    'c-apply':'Apply for Permit','c-citations':'My Citations','c-pay':'Pay a Fine','c-receipts':'My Receipts',
+    'c-dispute':'File a Dispute','c-account':'My Account','c-help':'Help & Support',
+    'o-home':'Shift Dashboard','o-lookup':'Permit Lookup','o-issue':'Issue Citation','o-shift':'Activity Log','o-zones':'Zone Status',
+    'a-home':'City Overview','a-queue':'Permit Queue','a-revenue':'Revenue','a-officers':'Officer Activity'
+  };
+  document.getElementById('page-title').textContent=titles[id]||'Dashboard';
+  renderAll();
+}
+
+// ═══ INITIALIZE ═══
+initStorage();
+renderAll();
+</script>
+</body>
+</html>
