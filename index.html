@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riverton Parking Modernization | MRP Group 11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #0078D4;
+  --blue-hover: #106EBE;
+  --blue-light: rgba(0,120,212,0.08);
+  --teal: #01B8AA;
+  --coral: #FD625E;
+  --gold: #F2C80F;
+  --dark: #374649;
+  --bg: #EEF2F7;
+  --card: #FFFFFF;
+  --border: #E6E6E6;
+  --text: #333333;
+  --text-muted: #666666;
+  --text-faint: #999999;
+  --sidebar-w: 230px;
+  --header-h: 0px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: "Inter", -apple-system, sans-serif; background: var(--bg); color: var(--text); }
+
+/* ── Sidebar ─────────────────────────────── */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w); background: var(--card);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; z-index: 50;
+  overflow-y: auto;
+}
+.sidebar-brand {
+  padding: 20px 18px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-brand .icon {
+  width: 30px; height: 30px; border-radius: 8px; background: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+}
+.sidebar-brand .icon svg { width: 14px; height: 14px; fill: none; stroke: #fff; stroke-width: 2; }
+.sidebar-brand .label { line-height: 1.1; }
+.sidebar-brand .label small { font-size: 10px; color: var(--text-faint); display: block; }
+.sidebar-brand .label strong { font-size: 13px; color: var(--text); }
+
+.sidebar-nav { flex: 1; padding: 12px 8px; }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; border-radius: 8px;
+  font-size: 13px; color: var(--text-muted); text-decoration: none;
+  transition: all 0.15s; margin-bottom: 2px;
+}
+.sidebar-nav a:hover { background: #F5F5F5; color: var(--text); }
+.sidebar-nav a.active { background: var(--blue-light); color: var(--blue); font-weight: 500; }
+.sidebar-nav a svg { width: 15px; height: 15px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+.sidebar-footer {
+  padding: 14px; border-top: 1px solid var(--border); text-align: center;
+  font-size: 10px; color: var(--text-faint);
+}
+
+/* ── Main content area ───────────────────── */
+.main { margin-left: var(--sidebar-w); min-height: 100vh; }
+
+.page-header {
+  background: var(--card); padding: 16px 28px;
+  border-bottom: 1px solid var(--border);
+}
+.page-header h1 { font-size: 18px; font-weight: 600; color: var(--text); }
+.page-header p { font-size: 12px; color: var(--text-faint); margin-top: 2px; }
+
+.content { padding: 16px 24px 40px; }
+
+/* ── Section panels ──────────────────────── */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── Cards ────────────────────────────────── */
+.card {
+  background: var(--card); border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 16px 20px; margin-bottom: 12px;
+}
+.card h3 {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #F2F2F2;
+}
+.card p { font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px; }
+.card p:last-child { margin-bottom: 0; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+
+/* ── KPI row ──────────────────────────────── */
+.kpi-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 12px; }
+.kpi {
+  background: var(--card); border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 14px 18px; text-align: center;
+}
+.kpi .num { font-size: 26px; font-weight: 700; }
+.kpi .num.bad { color: var(--coral); }
+.kpi .num.good { color: var(--teal); }
+.kpi .num.blue { color: var(--blue); }
+.kpi .label { font-size: 11px; color: var(--text-faint); margin-top: 4px; }
+
+/* ── Tables ───────────────────────────────── */
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead th {
+  background: #F5F5F5; padding: 8px 12px; text-align: left;
+  font-weight: 600; color: var(--text); border-bottom: 2px solid #E0E0E0;
+  font-size: 11px;
+}
+tbody td { padding: 7px 12px; border-bottom: 1px solid #F2F2F2; color: var(--text-muted); }
+tbody tr:hover { background: #F8FAFF; }
+
+/* ── Pipeline ─────────────────────────────── */
+.pipeline {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; padding: 12px 0; flex-wrap: wrap;
+}
+.pipe-box {
+  background: #FFF0F0; border-radius: 4px;
+  padding: 8px 12px; text-align: center; min-width: 85px;
+}
+.pipe-box .t { font-size: 11px; font-weight: 600; color: var(--coral); }
+.pipe-box .d { font-size: 9px; color: var(--text-faint); }
+.pipe-arr { color: var(--coral); font-weight: 700; padding: 0 3px; font-size: 14px; }
+
+/* ── Module cards ─────────────────────────── */
+.mod-card {
+  background: var(--card); border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 16px 18px;
+}
+.mod-card.c2, .mod-card.c3, .mod-card.c4 { }
+.mod-card .num-badge {
+  width: 24px; height: 24px; border-radius: 6px; background: var(--blue);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 8px;
+}
+.mod-card.c2 .num-badge { background: var(--teal); }
+.mod-card.c3 .num-badge { background: var(--gold); }
+.mod-card.c4 .num-badge { background: var(--coral); }
+.mod-card h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.mod-card p { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0; }
+
+/* ── Compare cards ────────────────────────── */
+.cmp-card {
+  background: var(--card); border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 14px 16px;
+}
+.cmp-card .cmp-label { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+.cmp-vals { display: flex; gap: 8px; }
+.cmp-v { flex:1; border-radius: 4px; padding: 10px; text-align: center; }
+.cmp-v.bad { background: #FFF0F0; }
+.cmp-v.good { background: #F0FAF9; }
+.cmp-v .tag { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.cmp-v.bad .tag { color: var(--coral); }
+.cmp-v.good .tag { color: var(--teal); }
+.cmp-v .val { font-size: 20px; font-weight: 700; margin-top: 2px; }
+.cmp-v.bad .val { color: var(--coral); }
+.cmp-v.good .val { color: var(--teal); }
+
+/* ── Timeline ─────────────────────────────── */
+.tl-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 12px; background: #FAFAFA; margin-bottom: 3px; border-radius: 4px;
+}
+.tl-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.tl-phase { font-family: monospace; font-size: 11px; color: var(--text-faint); width: 52px; }
+.tl-task { font-size: 12px; color: var(--text); flex: 1; }
+.tl-months { font-family: monospace; font-size: 11px; color: var(--text-faint); }
+
+/* ── Ethics ───────────────────────────────── */
+.eth-card { padding: 14px 18px; margin-bottom: 12px; }
+.eth-card h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.eth-card p { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+/* ── Reflection ───────────────────────────── */
+.ref-card {
+  background: var(--card); border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  padding: 16px 20px; margin-bottom: 10px;
+}
+.ref-card .r-name { font-size: 13px; font-weight: 600; color: var(--blue); margin-bottom: 2px; }
+.ref-card .r-role { font-size: 10px; color: var(--text-faint); margin-bottom: 8px; }
+.ref-card p { font-size: 12px; color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+/* ── Images ───────────────────────────────── */
+.img-block { text-align: center; margin: 14px 0; }
+.img-block img { max-width: 100%; border-radius: 4px; box-shadow: 0 1px 8px rgba(0,0,0,0.06); border: 1px solid #eee; }
+.img-block .cap { font-size: 10px; color: var(--text-faint); margin-top: 6px; font-style: italic; }
+
+/* ── Buttons ──────────────────────────────── */
+.btn {
+  display: inline-block; padding: 10px 22px; border-radius: 4px;
+  font-size: 13px; font-weight: 600; text-decoration: none;
+  transition: all 0.15s; cursor: pointer; border: none;
+}
+.btn-blue { background: var(--blue); color: #fff; }
+.btn-blue:hover { background: var(--blue-hover); }
+.btn-outline { background: var(--card); color: var(--blue); border: 1px solid var(--blue); }
+.btn-outline:hover { background: var(--blue-light); }
+.btn-teal { background: var(--teal); color: #fff; }
+
+/* ── Hero banner inside home ──────────────── */
+.hero-banner {
+  background: linear-gradient(135deg, #0062ad 0%, #0078D4 50%, #2899f5 100%);
+  border-radius: 6px; padding: 32px 28px; color: #fff; margin-bottom: 12px;
+  position: relative; overflow: hidden;
+}
+.hero-banner::after {
+  content: ""; position: absolute; right: -40px; top: -40px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+.hero-banner::before {
+  content: ""; position: absolute; right: 60px; bottom: -60px;
+  width: 150px; height: 150px; border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+.hero-banner h2 { font-size: 24px; font-weight: 600; color: #fff; margin-bottom: 4px; position: relative; }
+.hero-banner .sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-bottom: 16px; position: relative; }
+.hero-banner p { font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.7; position: relative; margin-bottom: 10px; }
+.team-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; position: relative; }
+.team-chip {
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px; padding: 4px 14px; font-size: 12px; color: #fff;
+}
+
+/* ── Section title ────────────────────────── */
+.sec-title {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.sec-title .dot { width: 4px; height: 18px; border-radius: 2px; background: var(--blue); }
+
+/* ── Responsive ───────────────────────────── */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .grid-2, .grid-3, .grid-4, .kpi-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════ SIDEBAR ════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="label">
+      <small>MRP Group 11</small>
+      <strong>Riverton Parking</strong>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="#home" class="active" data-section="home">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="#problem" data-section="problem">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Problem
+    </a>
+    <a href="#research" data-section="research">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      Research
+    </a>
+    <a href="#data" data-section="data">
+      <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      Data & ERD
+    </a>
+    <a href="#dashboard" data-section="dashboard">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="#solution" data-section="solution">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Solution
+    </a>
+    <a href="#comparison" data-section="comparison">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      AS-IS vs TO-BE
+    </a>
+    <a href="#ethics" data-section="ethics">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Ethics
+    </a>
+    <a href="#reflection" data-section="reflection">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Reflection
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">IS-5960-02 | SLU | 2026</div>
+</aside>
+
+<!-- ════════ MAIN ════════ -->
+<div class="main">
+
+<!-- ──── HOME ──── -->
+<div class="section active" id="home">
+  <div class="page-header">
+    <h1>City of Riverton, Parking Permit & Enforcement Modernization</h1>
+    <p>MRP Group 11 | IS-5960-02 | Saint Louis University | Spring 2026</p>
+  </div>
+  <div class="content">
+    <div class="hero-banner">
+      <h2>Riverton Parking Modernization</h2>
+      <div class="sub">A data-driven proposal to modernize Riverton's parking permit, enforcement, and revenue operations</div>
+      <div class="team-chips">
+        <span class="team-chip">Amruth Raju Melike</span>
+        <span class="team-chip">Sharanya Pakker</span>
+        <span class="team-chip">Sowjanya Chowdary Kavuri</span>
+        <span class="team-chip">Sri Sharana Lingala</span>
+        <span class="team-chip">Vani Meenakshi Kalva</span>
+      </div>
+      <div style="margin-top:16px; position:relative;">
+        <a href="https://mrp-group-11.vercel.app" target="_blank" class="btn btn-teal">Open Live Dashboard</a>
+        <a href="https://github.com/Sowjichows/MRP_Group_11" target="_blank" class="btn" style="background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.25);">GitHub Repo</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Executive Summary</h3>
+      <p>Riverton's parking system hasn't been updated in over a decade. Permits still come in on paper and take five days to process. Enforcement officers carry handheld devices that only sync every six to eight hours, so they regularly ticket cars that actually have valid permits. The city collects only 58% of the fines it issues, and 311 parking complaints have been growing 8% every year.</p>
+      <p>We pulled 17 real datasets from 11 sources, mostly NYC city departments like Finance, Transportation, and 311, along with data from the MTA, the Census Bureau, and Open-Meteo for weather. We used New York City because it has the same parking problems as Riverton and makes all its data public. We cleaned and processed everything with Python and built an interactive dashboard using Next.js and Recharts, deployed on Vercel so anyone with the link can explore it.</p>
+      <p>What the data showed us is that there is no single system connecting permits, enforcement, finance, and citizen services. That one gap causes every other problem. Our solution is a cloud-based Parking Management System with four parts: an online citizen portal, a real-time mobile app for officers, an automated revenue tracking engine, and analytics dashboards for leadership. To test whether this would actually work, we generated two synthetic datasets of 5,000 records each and compared them side by side. The results: collection rate goes from 57.7% to 86.9%, wrongful citations drop from 15.7% to 2%, and permit processing shrinks from 8 days to about an hour.</p>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi"><div class="num bad">5 days</div><div class="label">Permit Processing</div></div>
+      <div class="kpi"><div class="num bad">15.2%</div><div class="label">Wrongful Citations</div></div>
+      <div class="kpi"><div class="num bad">42%</div><div class="label">Fines Uncollected</div></div>
+      <div class="kpi"><div class="num bad">+8%/yr</div><div class="label">Complaint Growth</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ──── PROBLEM ──── -->
+<div class="section" id="problem">
+  <div class="page-header"><h1>Problem Context & Stakeholders</h1><p>Current state of Riverton's parking operations and who is affected</p></div>
+  <div class="content">
+    <div class="card">
+      <h3>Background</h3>
+      <p>Riverton is a growing mid-sized city with a university, a busy downtown, and older neighborhoods that were never designed for this much traffic. The parking system running the whole operation was built years ago for a much smaller population. Staff call it "held together with tape," and honestly, looking at how it works, that's not an exaggeration.</p>
+      <p>The biggest issue is that nothing is connected. The Permit Office runs a legacy app on old servers. Some departments still take paper forms. Others use an online form that dumps into a spreadsheet. Enforcement officers walk around with handheld devices that only get updated through a batch upload a few times a day, meaning there's a 6-8 hour window where their data is stale. Finance tracks revenue on separate spreadsheets. And when a citizen calls 311 to complain, the person answering the phone has no way to check permit or enforcement records. Every department is its own island.</p>
+    </div>
+
+    <div class="card">
+      <h3>The Broken Workflow</h3>
+      <p style="font-size:11px; color:var(--text-faint); margin-bottom:12px;">Every problem traces back to one root cause: no end-to-end tracking across departments</p>
+      <div class="pipeline">
+        <div class="pipe-box"><div class="t">Paper Form</div><div class="d">42% still paper</div></div><div class="pipe-arr">&rarr;</div>
+        <div class="pipe-box"><div class="t">5-Day Wait</div><div class="d">Manual review</div></div><div class="pipe-arr">&rarr;</div>
+        <div class="pipe-box"><div class="t">Manual Entry</div><div class="d">Staff types it in</div></div><div class="pipe-arr">&rarr;</div>
+        <div class="pipe-box"><div class="t">Batch Upload</div><div class="d">6-8 hour cycle</div></div><div class="pipe-arr">&rarr;</div>
+        <div class="pipe-box"><div class="t">Stale Data</div><div class="d">Old records</div></div><div class="pipe-arr">&rarr;</div>
+        <div class="pipe-box"><div class="t">Wrongful Ticket</div><div class="d">15.2% error</div></div><div class="pipe-arr">&rarr;</div>
+        <div class="pipe-box"><div class="t">Dispute</div><div class="d">58-hr wait</div></div><div class="pipe-arr">&rarr;</div>
+        <div class="pipe-box"><div class="t">Revenue Lost</div><div class="d">42% uncollected</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Stakeholder Impact</h3>
+      <table>
+        <thead><tr><th>Stakeholder</th><th>Pain Point</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Parking Permit Office</strong></td><td>5-day processing, 42% paper forms, manual data entry, duplicate records</td></tr>
+          <tr><td><strong>Enforcement Officers</strong></td><td>6-8 hr stale data, wrongful citations, citizen confrontations</td></tr>
+          <tr><td><strong>Finance Department</strong></td><td>42% fines uncollected, no automated tracking, dispute backlog</td></tr>
+          <tr><td><strong>Customer Service / 311</strong></td><td>58-hour response time, 8% annual complaint growth, no visibility into permits</td></tr>
+          <tr><td><strong>City Leadership</strong></td><td>No real-time visibility, decisions based on weekly spreadsheets</td></tr>
+          <tr><td><strong>Residents & Business Owners</strong></td><td>Wrongful tickets, long permit waits, inconsistent enforcement</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <p>The Deputy City Manager has made parking modernization a priority, but there's a real concern about the risk. This system, broken as it is, runs daily operations for multiple departments. You can't just shut it off and switch to something new overnight. That's why our proposal uses a phased approach where the old and new systems run side by side during transition.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ──── RESEARCH ──── -->
+<div class="section" id="research">
+  <div class="page-header"><h1>Research & Insights</h1><p>Academic and government audit sources validating the problem</p></div>
+  <div class="content">
+    <div class="card">
+      <h3>What Other Cities Found</h3>
+      <p>Before proposing anything, we wanted to see if Riverton's problems actually show up in other cities or if this case was unusual. They show up everywhere.</p>
+      <p>Oakland's city auditor (2017) found that weak citation tracking led to over $2 million in lost revenue per year just from voided tickets. Long Beach (2012) had $17.6 million in unpaid citations piling up over three years because their system was too slow to chase the money. Pasadena's parking garage audit (2019) found similar gaps: inconsistent controls and poor reconciliation between departments. McKinsey's research on government productivity (2017) puts a number on the broader pattern: $3.5 trillion in global losses every year from fragmented government workflows.</p>
+      <p>At the street level, Manville and Pinski (2021) found that in many US cities, over 40% of parked vehicles don't pay and only about 10% of violators actually get cited. Biyik et al. (2021) reviewed smart parking architectures and found that integrated systems consistently outperform disconnected ones.</p>
+    </div>
+
+    <div class="sec-title"><div class="dot"></div>What NYC Data Confirmed</div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="num bad">60%+</div><div class="label">Citations in 2 boroughs</div></div>
+      <div class="kpi"><div class="num bad">42%</div><div class="label">Fines uncollected</div></div>
+      <div class="kpi"><div class="num bad">8.1%</div><div class="label">Annual complaint growth</div></div>
+      <div class="kpi"><div class="num bad">50%+</div><div class="label">Enforcement drops in winter</div></div>
+    </div>
+
+    <div class="card">
+      <p>One thing that surprised us was NYC's parking regulation data: over 350,000 block-level rules that change by day of week and time of day. It's easy to see why officers with 6-hour-old data on outdated devices can't keep up. Add in weather effects, transit patterns, and city events, and it's clear the current system has no way to adapt to any of it.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ──── DATA ──── -->
+<div class="section" id="data">
+  <div class="page-header"><h1>Data Structure & Analysis</h1><p>17 datasets from 11 sources, ERD, and data pipeline</p></div>
+  <div class="content">
+    <div class="card">
+      <h3>Entity Relationship Diagram</h3>
+      <div class="img-block"><img src="images/6_erd.png" alt="ERD"><div class="cap">ERD showing relationships between the eight core datasets</div></div>
+    </div>
+
+    <div class="card">
+      <h3>17 Datasets from 11 Sources</h3>
+      <p>We collected all datasets using Python scripts with the requests library, calling public APIs from four data portals.</p>
+      <table>
+        <thead><tr><th>Source</th><th>Datasets</th></tr></thead>
+        <tbody>
+          <tr><td><strong>NYC Dept. of Finance</strong></td><td>Parking Violations Issued, Open Parking & Camera Violations</td></tr>
+          <tr><td><strong>NYC Dept. of Transportation</strong></td><td>Parking Regulations, Traffic Counts, Pavement Ratings, Muni-Meters, Meter Locations</td></tr>
+          <tr><td><strong>NYC 311 / DoITT</strong></td><td>311 Service Requests (filtered to parking complaints)</td></tr>
+          <tr><td><strong>NYC Mayor's Office</strong></td><td>NYC Permitted Events</td></tr>
+          <tr><td><strong>NYC Consumer Affairs</strong></td><td>Sidewalk Cafe Licenses, Issued Business Licenses</td></tr>
+          <tr><td><strong>NYC Payroll Admin</strong></td><td>Citywide Payroll Data</td></tr>
+          <tr><td><strong>NYPD</strong></td><td>NYPD Complaint Data Historic</td></tr>
+          <tr><td><strong>NYC City Planning</strong></td><td>NYC Population by Community District</td></tr>
+          <tr><td><strong>MTA / NY State</strong></td><td>MTA Subway Hourly Ridership</td></tr>
+          <tr><td><strong>US Census Bureau</strong></td><td>ACS Vehicle Ownership by Census Tract</td></tr>
+          <tr><td><strong>Open-Meteo</strong></td><td>NYC Weather 2020-2023</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Data Pipeline</h3>
+      <div class="img-block"><img src="images/5_data_pipeline.png" alt="Data Pipeline"><div class="cap">Data pipeline: Sources, Extract, Transform, Store, Load, Visualize</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Data Cleaning</h3>
+      <p>We cleaned all 17 datasets using pandas: removed duplicates, dropped records missing key fields (about 2-3% of records), standardized all dates to YYYY-MM-DD, filtered 311 data to parking-related complaints only, and converted string columns to proper numeric types for aggregation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ──── DASHBOARD ──── -->
+<div class="section" id="dashboard">
+  <div class="page-header"><h1>Dashboard & Insights</h1><p>Interactive analytics dashboard built with Next.js 14 and Recharts</p></div>
+  <div class="content">
+    <div class="card">
+      <h3>Live Dashboard</h3>
+      <p>We built the dashboard as a real web application in Next.js 14, not a mockup. It's deployed on Vercel with a public URL, so anyone can open it and interact with the charts and filters. It shows the current problems using real data (Part 1), and works as a prototype of what city leadership would actually use after modernization (Part 2).</p>
+      <div style="text-align:center; margin:16px 0;">
+        <a href="https://mrp-group-11.vercel.app" target="_blank" class="btn btn-blue">Open Live Dashboard</a>
+        <a href="https://github.com/Sowjichows/MRP_Group_11" target="_blank" class="btn btn-outline">View Source Code</a>
+      </div>
+    </div>
+
+    <div class="sec-title"><div class="dot"></div>Key Insights from the Data</div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Enforcement is concentrated, not distributed</h3>
+        <p>Manhattan and Brooklyn account for over 60% of all citations while outer boroughs are under-served. The hourly chart shows enforcement peaks between 10am-2pm and drops to zero by 7pm, meaning overnight violations go completely unenforced.</p>
+      </div>
+      <div class="card">
+        <h3>Revenue leakage is structural, not occasional</h3>
+        <p>Every single month, the stacked bar chart shows a significant red section (outstanding revenue). 42% of fines are never collected: 27% unpaid with nobody following up, 15% disputed. This isn't one bad quarter. It's consistent.</p>
+      </div>
+      <div class="card">
+        <h3>More enforcement doesn't mean happier citizens</h3>
+        <p>311 complaints grow 8% annually. The boroughs with the most enforcement also have the most complaints. More tickets aren't making people happier. The problem is the system, not the effort.</p>
+      </div>
+      <div class="card">
+        <h3>External factors are invisible to the current system</h3>
+        <p>Cold weather cuts enforcement by 50% or more. Events create parking spikes. Areas with less transit have more parking demand. The current system uses the same schedule regardless, wasting resources.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ──── SOLUTION ──── -->
+<div class="section" id="solution">
+  <div class="page-header"><h1>Proposed Solution</h1><p>Cloud-based Parking Management System with TOGAF enterprise architecture</p></div>
+  <div class="content">
+    <div class="card">
+      <p>The solution is a cloud-based Parking Management System that replaces Riverton's disconnected tools with one platform. Instead of paper forms going to one system, batch files going to another, and spreadsheets tracking a third, everything runs through a single central database.</p>
+    </div>
+
+    <div class="sec-title"><div class="dot"></div>Four Integrated Modules</div>
+    <div class="grid-4">
+      <div class="mod-card"><div class="num-badge">1</div><h4>Citizen Portal</h4><p>Online permit applications, status tracking, fine payments, dispute filing. No more paper forms.</p></div>
+      <div class="mod-card c2"><div class="num-badge">2</div><h4>Enforcement App</h4><p>Real-time permit data on mobile devices, instant sync. Approved at 9am, visible at 9am.</p></div>
+      <div class="mod-card c3"><div class="num-badge">3</div><h4>Revenue Engine</h4><p>Automated reminders, escalation, dispute tracking. Every dollar tracked end to end.</p></div>
+      <div class="mod-card c4"><div class="num-badge">4</div><h4>Analytics Dashboard</h4><p>Interactive KPIs, filters, trends for every department. What our prototype demonstrates.</p></div>
+    </div>
+
+    <div class="card">
+      <h3>Solution Architecture (ABB)</h3>
+      <div class="img-block"><img src="images/2_solution_abb.png" alt="Architecture"><div class="cap">Architecture Building Blocks: Users, Application Services, Data Layer, Infrastructure</div></div>
+    </div>
+
+    <div class="card">
+      <h3>TOGAF Architecture Domains</h3>
+      <div class="img-block"><img src="images/1_togaf_domains.png" alt="TOGAF Domains"><div class="cap">Business, Data, Application, and Technical Architecture</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Metrics for Success (KPIs)</h3>
+      <table>
+        <thead><tr><th>KPI</th><th>AS-IS</th><th>TO-BE</th><th>Stakeholder</th></tr></thead>
+        <tbody>
+          <tr><td>Permit processing time</td><td>5-8 days</td><td>Under 1 hour</td><td>Permit Office, Residents</td></tr>
+          <tr><td>Wrongful citation rate</td><td>15.2%</td><td>Under 2%</td><td>Enforcement, Residents</td></tr>
+          <tr><td>Revenue collection rate</td><td>58%</td><td>88%</td><td>Finance Department</td></tr>
+          <tr><td>Digital submission rate</td><td>58%</td><td>95%</td><td>Permit Office</td></tr>
+          <tr><td>Citizen satisfaction</td><td>42%</td><td>85%</td><td>All stakeholders</td></tr>
+          <tr><td>Data sync latency</td><td>6-8 hours</td><td>Real-time</td><td>Enforcement, IT</td></tr>
+          <tr><td>311 complaint trend</td><td>+8%/year</td><td>Declining</td><td>Customer Service</td></tr>
+          <tr><td>Duplicate record rate</td><td>8.5%</td><td>Under 0.1%</td><td>IT, all departments</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Implementation Timeline</h3>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--coral)"></div><div class="tl-phase">Phase 1</div><div class="tl-task">Cloud Migration & Central Database</div><div class="tl-months">Months 0-4</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--coral)"></div><div class="tl-phase">Phase 2</div><div class="tl-task">Real-time Sync Engine</div><div class="tl-months">Months 3-7</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--gold)"></div><div class="tl-phase">Phase 3</div><div class="tl-task">Citizen Self-Service Portal</div><div class="tl-months">Months 5-9</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--gold)"></div><div class="tl-phase">Phase 4</div><div class="tl-task">Mobile Enforcement App</div><div class="tl-months">Months 7-11</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--blue)"></div><div class="tl-phase">Phase 5</div><div class="tl-task">Analytics & Dashboards</div><div class="tl-months">Months 9-13</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--teal)"></div><div class="tl-phase">Phase 6</div><div class="tl-task">Legacy System Decommission</div><div class="tl-months">Months 12-15</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Tools & Platforms (SBB)</h3>
+      <div class="img-block"><img src="images/4_sbb_tools.png" alt="SBB"><div class="cap">Solution Building Blocks: Frontend, Data Processing, Sources, Deployment, Visualization, Framework</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Responsibility Matrix</h3>
+      <table>
+        <thead><tr><th>Team Member</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sowjanya Chowdary Kavuri</strong></td><td>Data collection (Python API scripts), Vercel deployment, GitHub</td></tr>
+          <tr><td><strong>Sri Sharana Lingala</strong></td><td>Data cleaning, ERD, data modeling, synthetic dataset generation</td></tr>
+          <tr><td><strong>Sharanya Pakker</strong></td><td>Dashboard visualizations, chart components, filter interactions</td></tr>
+          <tr><td><strong>Amruth Raju Melike</strong></td><td>Analysis, insights, problem/solution framing</td></tr>
+          <tr><td><strong>Vani Meenakshi Kalva</strong></td><td>Documentation, formatting, project charter</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ──── COMPARISON ──── -->
+<div class="section" id="comparison">
+  <div class="page-header"><h1>AS-IS vs TO-BE Comparison</h1><p>Data 1 (current state) vs Data 2 (simulated improvements), 5,000 records each</p></div>
+  <div class="content">
+    <div class="card">
+      <p>We didn't want the improvement claims to just be text on a slide. So we generated two datasets in Python to actually test the numbers.</p>
+      <p><strong>Data 1</strong> (riverton_asis.csv, 5,000 rows) simulates the current broken system using the case study's own numbers. <strong>Data 2</strong> (riverton_tobe.csv, 5,000 rows) simulates the system after the PMS is implemented, using targets validated by our research from Oakland, Long Beach, and Pasadena. Both files have the exact same 25 columns. The only difference is the performance numbers.</p>
+    </div>
+
+    <div class="sec-title"><div class="dot"></div>Side-by-Side Results</div>
+    <div class="grid-2">
+      <div class="cmp-card"><div class="cmp-label">Collection Rate</div><div class="cmp-vals"><div class="cmp-v bad"><div class="tag">AS-IS</div><div class="val">57.7%</div></div><div class="cmp-v good"><div class="tag">TO-BE</div><div class="val">86.9%</div></div></div></div>
+      <div class="cmp-card"><div class="cmp-label">Wrongful Citation Rate</div><div class="cmp-vals"><div class="cmp-v bad"><div class="tag">AS-IS</div><div class="val">15.7%</div></div><div class="cmp-v good"><div class="tag">TO-BE</div><div class="val">2.0%</div></div></div></div>
+      <div class="cmp-card"><div class="cmp-label">Permit Processing</div><div class="cmp-vals"><div class="cmp-v bad"><div class="tag">AS-IS</div><div class="val">8 days</div></div><div class="cmp-v good"><div class="tag">TO-BE</div><div class="val">1.25 hrs</div></div></div></div>
+      <div class="cmp-card"><div class="cmp-label">Dispute Rate</div><div class="cmp-vals"><div class="cmp-v bad"><div class="tag">AS-IS</div><div class="val">14.7%</div></div><div class="cmp-v good"><div class="tag">TO-BE</div><div class="val">4.1%</div></div></div></div>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+      <h3>AS-IS vs TO-BE Architecture</h3>
+      <div class="img-block"><img src="images/3_asis_vs_tobe.png" alt="AS-IS vs TO-BE"><div class="cap">Current state to proposed transformation</div></div>
+    </div>
+
+    <div style="text-align:center; margin:16px 0;">
+      <a href="https://mrp-group-11.vercel.app/comparison" target="_blank" class="btn btn-blue">View Full Comparison Dashboard</a>
+    </div>
+
+    <div class="grid-2">
+      <div class="card" style="">
+        <h3>AS-IS Rules (Data 1)</h3>
+        <p>Permit processing: 4-12 days (avg 8). Wrongful rate: 15.2%. Collection: 58% collected, 27% unpaid, 15% disputed. Sync: 15% complete, 40% delayed, 45% batch. Payment delay: 10-90 days.</p>
+      </div>
+      <div class="card" style="">
+        <h3>TO-BE Rules (Data 2)</h3>
+        <p>Permit processing: 0.5-2 hours. Wrongful rate: 2%. Collection: 88% collected, 8% unpaid, 4% disputed. Sync: 95% real-time. Payment delay: 1-20 days.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>ROI Projection</h3>
+      <p>The initial investment is $2.8 million. The ROI chart on the comparison dashboard shows break-even by mid-Year 2, with $4.8 million in annual savings by Year 5 from improved collection rates, reduced wrongful citation costs, and eliminated manual processing.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ──── ETHICS ──── -->
+<div class="section" id="ethics">
+  <div class="page-header"><h1>Ethical & Social Considerations</h1><p>Privacy, bias, inclusion, and transparency</p></div>
+  <div class="content">
+    <div class="card">
+      <div class="eth-card"><h4>Data Privacy</h4><p>Permit applications have names, addresses, and plate numbers. Citation records are tied to individuals. The system needs encryption, role-based access so not every employee can see everything, and audit logs. State privacy regulations apply.</p></div>
+      <div class="eth-card" style=""><h4>Enforcement Bias</h4><p>Our data already shows Manhattan and Brooklyn get 60% of citations. If the dashboard drives deployment decisions, there's a risk of reinforcing existing concentration. The system should track equity metrics to distribute enforcement based on actual need, not historical patterns.</p></div>
+      <div class="eth-card" style=""><h4>Digital Divide</h4><p>Putting permits online is great for people with internet access. But lower-income residents, elderly people, and non-English speakers might get left behind. We recommend in-person kiosks at city offices and libraries, plus multilingual support.</p></div>
+      <div class="eth-card" style=""><h4>Transparency</h4><p>People should be able to see why they got a ticket, where their permit application stands, and how a dispute is being handled. The current paper system is a black box. The new system should be the opposite: clear status tracking at every step.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ──── REFLECTION ──── -->
+<div class="section" id="reflection">
+  <div class="page-header"><h1>Lessons Learned & Team Reflection</h1><p>What we learned, what we'd change, and how the team worked together</p></div>
+  <div class="content">
+    <div class="ref-card"><div class="r-name">Sowjanya Chowdary Kavuri</div><div class="r-role">Data Collection & Deployment</div><p>The hardest part for me was figuring out how to pull data from four completely different APIs. NYC Open Data uses Socrata, the Census Bureau has its own API format, Open-Meteo uses REST with different parameters, and NY State's portal looks similar to NYC's but has different quirks. I spent a lot of time just reading API documentation and handling errors when queries timed out or returned unexpected formats. Deploying on Vercel was actually the easy part once the code was on GitHub, but debugging build failures when a CSV file was too large or a path was wrong taught me a lot about how Next.js handles server-side data.</p></div>
+
+    <div class="ref-card"><div class="r-name">Sri Sharana Lingala</div><div class="r-role">Data Cleaning & Modeling</div><p>I didn't expect data cleaning to take as long as it did. In class, cleaning sounds straightforward: remove duplicates, fix dates, drop nulls. In practice, every dataset had its own problems. The parking violations file used county codes like "MN" and "BK" instead of full borough names. The 311 file had complaint types that looked parking-related but weren't. Date formats varied between MM/DD/YYYY and ISO timestamps across files. Generating the synthetic datasets for the comparison was actually the most satisfying part because I could control every variable and see the exact impact of each rule change.</p></div>
+
+    <div class="ref-card"><div class="r-name">Sharanya Pakker</div><div class="r-role">Dashboard Visualization</div><p>Building charts in Recharts instead of Power BI was a steep learning curve at first. In Power BI you drag a field onto a chart and it works. In Recharts, you write JSX components, handle responsive containers, style tooltips manually, and wire up every filter to state variables. But once I got comfortable, the control was worth it. I could make filters that recalculate KPI cards, not just highlight bars. The moment that felt most rewarding was when the borough filter on the Executive page made all four KPI cards change their numbers live.</p></div>
+
+    <div class="ref-card"><div class="r-name">Amruth Raju Melike</div><div class="r-role">Analysis & Insights</div><p>My role was to connect the data to the story. We had thousands of data points, but a chart without interpretation is just a picture. The hardest part was being honest about what the data actually shows versus what we wanted it to show. The insight I'm most proud of is the connection between the Citizens page and the Enforcement page: the boroughs with the most enforcement also have the most complaints. That tells you the problem isn't that officers aren't working hard enough. It's the system they're working with.</p></div>
+
+    <div class="ref-card"><div class="r-name">Vani Meenakshi Kalva</div><div class="r-role">Documentation & Formatting</div><p>I learned that documentation isn't just about writing things down after the work is done. It's about keeping everyone aligned while the work is happening. The responsibility matrix we set up in Week 2 was something I initially thought was just a formality, but it became the most important coordination tool we had. The most challenging part was the project charter because it required pulling together scope, resources, milestones, and constraints from every team member's area into one coherent document.</p></div>
+
+    <div class="card" style="background:#F0F6FF; border:1px solid #BFDBFE;">
+      <h3 style="border:none; padding:0;">Team Takeaway</h3>
+      <p>We underestimated how much time data work takes compared to building the actual dashboard. If we had the semester over again, we would spend the first two weeks setting up the data pipeline and deployment infrastructure before touching any charts. Our biggest revision was cutting the Overview and Permits pages late in development after an honest audit showed one was redundant and the other used the wrong dataset. That decision made the final dashboard stronger.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<script>
+// Section switching via sidebar nav
+const links = document.querySelectorAll('.sidebar-nav a');
+const sections = document.querySelectorAll('.section');
+
+function showSection(id) {
+  sections.forEach(s => s.classList.remove('active'));
+  links.forEach(l => l.classList.remove('active'));
+  const target = document.getElementById(id);
+  const link = document.querySelector(`[data-section="${id}"]`);
+  if (target) target.classList.add('active');
+  if (link) link.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('data-section');
+    showSection(id);
+    history.pushState(null, '', '#' + id);
+  });
+});
+
+// Handle direct URL hash
+if (window.location.hash) {
+  const id = window.location.hash.slice(1);
+  showSection(id);
+}
+
+// Handle back/forward
+window.addEventListener('popstate', () => {
+  const id = window.location.hash.slice(1) || 'home';
+  showSection(id);
+});
+</script>
+
+</body>
+</html>
