@@ -1,0 +1,122 @@
+<mxfile host="app.diagrams.net">
+<diagram name="Solution Architecture" id="arch1">
+<mxGraphModel dx="1200" dy="800" grid="0" page="1" pageWidth="1100" pageHeight="750">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="title" value="&lt;b style='font-size:20px;'&gt;Solution Architecture&lt;/b&gt;&lt;br&gt;&lt;font color='#6B7280'&gt;City of Riverton - Parking Management System (TOGAF ADM)&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="200" y="10" width="600" height="50" as="geometry"/>
+    </mxCell>
+
+    <!-- LAYER 1: USERS -->
+    <mxCell id="L1" value="&lt;b&gt;USERS&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E3A5F;fontColor=#FFFFFF;strokeColor=none;fontSize=11;verticalAlign=top;align=left;spacingLeft=14;spacingTop=6;arcSize=6;container=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="80" width="920" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="u1" value="&lt;b&gt;Citizens&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Web Portal&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2563EB;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L1">
+      <mxGeometry x="60" y="30" width="130" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="u2" value="&lt;b&gt;Officers&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Mobile App&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0D9488;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L1">
+      <mxGeometry x="220" y="30" width="130" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="u3" value="&lt;b&gt;Permit Office&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Admin Panel&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7C3AED;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L1">
+      <mxGeometry x="380" y="30" width="130" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="u4" value="&lt;b&gt;Finance&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Revenue View&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D97706;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L1">
+      <mxGeometry x="540" y="30" width="130" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="u5" value="&lt;b&gt;Leadership&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Executive View&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E293B;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L1">
+      <mxGeometry x="700" y="30" width="130" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- LAYER 2: SERVICES -->
+    <mxCell id="L2" value="&lt;b&gt;APPLICATION SERVICES&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1E4D7A;fontColor=#FFFFFF;strokeColor=none;fontSize=11;verticalAlign=top;align=left;spacingLeft=14;spacingTop=6;arcSize=6;container=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="230" width="920" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="s1" value="&lt;b&gt;Permit&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Management&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3B82F6;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L2">
+      <mxGeometry x="30" y="30" width="140" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="s2" value="&lt;b&gt;Enforcement&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Service&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3B82F6;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L2">
+      <mxGeometry x="200" y="30" width="140" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="s3" value="&lt;b&gt;Revenue&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Service&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3B82F6;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L2">
+      <mxGeometry x="370" y="30" width="140" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="s4" value="&lt;b&gt;Analytics&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Service&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3B82F6;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L2">
+      <mxGeometry x="540" y="30" width="140" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="s5" value="&lt;b&gt;Notification&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Service&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3B82F6;fontColor=#FFF;strokeColor=none;fontSize=12;shadow=1;" vertex="1" parent="L2">
+      <mxGeometry x="710" y="30" width="140" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- LAYER 3: DATA -->
+    <mxCell id="L3" value="&lt;b&gt;DATA LAYER&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#164E63;fontColor=#FFFFFF;strokeColor=none;fontSize=11;verticalAlign=top;align=left;spacingLeft=14;spacingTop=6;arcSize=6;container=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="380" width="920" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="d1" value="&lt;b&gt;Central Parking Database&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Permits, Citations, Payments, Disputes&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#0E7490;fontColor=#FFF;strokeColor=none;fontSize=11;size=8;shadow=1;" vertex="1" parent="L3">
+      <mxGeometry x="60" y="25" width="340" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="d2" value="&lt;b&gt;External Data Feeds&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;NYC Open Data, Weather, Transit, Census&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#0E7490;fontColor=#FFF;strokeColor=none;fontSize=11;size=8;shadow=1;" vertex="1" parent="L3">
+      <mxGeometry x="500" y="25" width="340" height="55" as="geometry"/>
+    </mxCell>
+
+    <!-- LAYER 4: INFRA -->
+    <mxCell id="L4" value="&lt;b&gt;INFRASTRUCTURE&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0F172A;fontColor=#FFFFFF;strokeColor=none;fontSize=11;verticalAlign=top;align=left;spacingLeft=14;spacingTop=6;arcSize=6;container=1;" vertex="1" parent="1">
+      <mxGeometry x="40" y="530" width="920" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="i1" value="&lt;b&gt;Cloud Platform&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Vercel + GitHub Pages&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#334155;fontColor=#FFF;strokeColor=none;fontSize=11;shadow=1;" vertex="1" parent="L4">
+      <mxGeometry x="30" y="28" width="160" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="i2" value="&lt;b&gt;API Gateway&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Socrata SODA&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#334155;fontColor=#FFF;strokeColor=none;fontSize=11;shadow=1;" vertex="1" parent="L4">
+      <mxGeometry x="230" y="28" width="160" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="i3" value="&lt;b&gt;Sync Engine&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Real-time&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#334155;fontColor=#FFF;strokeColor=none;fontSize=11;shadow=1;" vertex="1" parent="L4">
+      <mxGeometry x="430" y="28" width="160" height="45" as="geometry"/>
+    </mxCell>
+    <mxCell id="i4" value="&lt;b&gt;Security&lt;/b&gt;&lt;br&gt;&lt;font style='font-size:10px'&gt;Auth &amp; Encryption&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#334155;fontColor=#FFF;strokeColor=none;fontSize=11;shadow=1;" vertex="1" parent="L4">
+      <mxGeometry x="630" y="28" width="160" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- ARROWS: Users to Services -->
+    <mxCell id="e1" style="curved=1;strokeColor=#2563EB;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="u1" target="s1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e1b" style="curved=1;strokeColor=#2563EB;strokeWidth=1;endArrow=blockThin;endFill=1;dashed=1;" edge="1" parent="1" source="u1" target="s3"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e2" style="curved=1;strokeColor=#0D9488;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="u2" target="s2"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e3" style="curved=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="u3" target="s1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e3b" style="curved=1;strokeColor=#7C3AED;strokeWidth=1;endArrow=blockThin;endFill=1;dashed=1;" edge="1" parent="1" source="u3" target="s5"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e4" style="curved=1;strokeColor=#D97706;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="u4" target="s3"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e5" style="curved=1;strokeColor=#64748B;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="u5" target="s4"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ARROWS: Services to Data -->
+    <mxCell id="ed1" style="curved=1;strokeColor=#3B82F6;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="s1" target="d1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ed2" style="curved=1;strokeColor=#3B82F6;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="s2" target="d1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ed3" style="curved=1;strokeColor=#3B82F6;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="s3" target="d1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ed4" style="curved=1;strokeColor=#3B82F6;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="s4" target="d2"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ed4b" style="curved=1;strokeColor=#3B82F6;strokeWidth=1;endArrow=blockThin;endFill=1;dashed=1;" edge="1" parent="1" source="s4" target="d1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ed5" style="curved=1;strokeColor=#3B82F6;strokeWidth=1;endArrow=blockThin;endFill=1;dashed=1;" edge="1" parent="1" source="s5" target="d2"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- ARROWS: Data to Infrastructure -->
+    <mxCell id="ei1" style="curved=1;strokeColor=#0E7490;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="d1" target="i1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ei2" style="curved=1;strokeColor=#0E7490;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="d1" target="i3"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ei3" style="curved=1;strokeColor=#0E7490;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="d2" target="i2"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="ei4" style="curved=1;strokeColor=#0E7490;strokeWidth=2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="d2" target="i4"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Notification alert arrow -->
+    <mxCell id="notif" style="curved=1;strokeColor=#EF4444;strokeWidth=2;endArrow=blockThin;endFill=1;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="s5" target="u5">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points"><mxPoint x="970" y="282"/><mxPoint x="970" y="132"/></Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="notif_lbl" value="&lt;font color='#EF4444' style='font-size:10px'&gt;Alerts&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="notif">
+      <mxGeometry x="-0.1" relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- LEGEND -->
+    <mxCell id="leg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#E2E8F0;" vertex="1" parent="1">
+      <mxGeometry x="40" y="640" width="920" height="35" as="geometry"/>
+    </mxCell>
+    <mxCell id="lg1" value="&lt;font style='font-size:9px'&gt;Solid = Primary flow | Dashed = Secondary | &lt;font color='#EF4444'&gt;Red = Notifications&lt;/font&gt; | Colors match user roles | MRP Group 11 | IS-5960 | SLU&lt;/font&gt;" style="text;html=1;fillColor=none;strokeColor=none;align=center;" vertex="1" parent="1">
+      <mxGeometry x="40" y="643" width="920" height="28" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>
+</diagram>
+</mxfile>
